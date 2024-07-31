@@ -1,13 +1,15 @@
 <template>
     <div class="topbar">
       <!-- Router link for logo -->
-      <router-link to="/home" class="app-logo-link">
+      <router-link to="/" class="app-logo-link">
         <img src="@/assets/steamLogo.png" alt="App Logo" class="app-logo">
       </router-link>
       <h1>{{ title }}</h1>
       <div class="app-name">Steam Database Application</div>
       <div class="user-info">
-        <a :href="userProfileLink">{{ displayName }}</a>
+        <router-link :to="{ name: 'userView' }" class="user-link">
+          {{ displayName }}
+        </router-link>
         <img src="@/assets/userLogo.png" alt="User Logo" class="user-logo">
       </div>
     </div>
@@ -47,6 +49,26 @@
     margin-right: 16px;
   }
   
+  .user-info {
+    display: flex;
+    align-items: center;
+  }
+  
+  .user-link {
+    margin-right: 8px;
+    font-weight: bold;
+    text-decoration: none;
+    color: inherit;
+  }
+  
+  .user-link:hover {
+    text-decoration: underline;
+  }
+  
+  .user-logo {
+    height: 25px;
+  }
+  
   .app-logo-link {
     display: flex;
     align-items: center;
@@ -56,26 +78,6 @@
     font-size: 1.5em;
     margin-right: auto;
     margin-left: 16px;
-  }
-  
-  .user-info {
-    display: flex;
-    align-items: center;
-    font-weight: bold;
-  }
-  
-  .user-info a {
-    text-decoration: none;
-    color: inherit;
-    margin-right: 8px; /* Space between link and logo */
-  }
-  
-  .user-info a:hover {
-    text-decoration: underline;
-  }
-  
-  .user-logo {
-    height: 25px;
   }
   </style>
   

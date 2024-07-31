@@ -4,8 +4,20 @@ import HomieView from '@/views/HomieView.vue';
 import Friends from '@/views/FriendsView.vue';
 import Games from '@/views/GamesView.vue';
 import LoginView from '@/views/LoginView.vue';
+import CreateView from '@/views/CreateView.vue';
+import UserView from '@/views/UserView.vue';
 
 const routes = [
+  {
+    path: '/login',
+    name: 'login',
+    component: LoginView
+  },
+  {
+    path: '/create',
+    name: 'create',
+    component: CreateView
+  },
   {
     path: '/',
     component: AppLayout,
@@ -13,22 +25,25 @@ const routes = [
       {
         path: '', // Home view at the root path
         name: 'home-view',
-        component: HomieView
-      },
-      {
-        path: 'login', // Home view at the root path
-        name: 'login',
-        component: LoginView
+        component: HomieView,
+        meta: { requiresAuth: true }
       },
       {
         path: 'friends',
         name: 'friendsView',
-        component: Friends
+        component: Friends,
+        meta: { requiresAuth: true }
       },
       {
         path: 'games',
         name: 'gamesView',
-        component: Games
+        component: Games,
+        meta: { requiresAuth: true }
+      },
+      {
+        path: 'user', // Route for User page
+        name: 'userView',
+        component: UserView
       }
     ]
   }
@@ -38,16 +53,5 @@ const router = createRouter({
   history: createWebHistory(),
   routes
 });
-
-// Remove authentication-related navigation guards
-// router.beforeEach((to, from, next) => {
-//   const isAuthenticated = false; // Authentication logic removed
-
-//   if (to.matched.some(record => record.meta.requiresAuth) && !isAuthenticated) {
-//     next({ name: 'login' });
-//   } else {
-//     next();
-//   }
-// });
 
 export default router;
