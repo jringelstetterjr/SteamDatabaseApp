@@ -6,6 +6,7 @@ import Games from '@/views/GamesView.vue';
 import LoginView from '@/views/LoginView.vue';
 import CreateView from '@/views/CreateView.vue';
 import UserView from '@/views/UserView.vue';
+import GameView from '@/views/GameView.vue';
 
 const routes = [
   {
@@ -41,9 +42,14 @@ const routes = [
         meta: { requiresAuth: true }
       },
       {
-        path: 'user', // Route for User page
+        path: 'user',
         name: 'userView',
         component: UserView
+      },
+      {
+        path: 'game',
+        name: 'game-view',
+        component: GameView,
       }
     ]
   }
