@@ -11,14 +11,14 @@ const routes = [
     component: AppLayout,
     children: [
       {
+        path: '', // Home view at the root path
+        name: 'home-view',
+        component: HomieView
+      },
+      {
         path: 'login', // Home view at the root path
         name: 'login',
         component: LoginView
-      },
-      {
-        path: 'home', // Home view at the root path
-        name: 'home-view',
-        component: HomieView
       },
       {
         path: 'friends',
