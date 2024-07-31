@@ -1,8 +1,16 @@
 <template>
-    <div class="login">
+    <div class="create">
       <h1 class="main-title">Steam Database Application</h1>
-      <p class="sub-title">Please log in, or create a new account.</p>
+      <p class="sub-title">Create a new account.</p>
       <div class="form">
+        <label for="display-name" class="form-label">Display Name:</label>
+        <input
+          id="display-name"
+          v-model="displayName"
+          type="text"
+          class="form-input"
+          placeholder="Enter your display name"
+        />
         <label for="username" class="form-label">Username:</label>
         <input
           id="username"
@@ -19,25 +27,26 @@
           class="form-input"
           placeholder="Enter your password"
         />
-        <button @click="login" class="login-button">Log In</button>
-        <router-link to="/create" class="create-account-link">Create account</router-link>
+        <button @click="createAccount" class="create-button">Create Account</button>
+        <router-link to="/login" class="login-link">Log in</router-link>
       </div>
     </div>
   </template>
   
   <script>
   export default {
-    name: 'LoginView',
+    name: 'CreateView',
     data() {
       return {
+        displayName: '',
         username: '',
         password: ''
       }
     },
     methods: {
-      login() {
-        console.log(`Username: ${this.username}, Password: ${this.password}`);
-        // Simulate login and redirect to home
+      createAccount() {
+        console.log(`Display Name: ${this.displayName}, Username: ${this.username}, Password: ${this.password}`);
+        // Simulate account creation and redirect to home
         this.$router.push({ name: 'home-view' });
       }
     }
@@ -45,7 +54,7 @@
   </script>
   
   <style scoped>
-  .login {
+  .create {
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -86,7 +95,7 @@
     border-radius: 4px;
   }
   
-  .login-button {
+  .create-button {
     padding: 10px 20px;
     border: none;
     border-radius: 4px;
@@ -96,18 +105,18 @@
     cursor: pointer;
   }
   
-  .login-button:hover {
+  .create-button:hover {
     background-color: #0056b3;
   }
   
-  .create-account-link {
+  .login-link {
     margin-top: 10px;
     font-size: 1em;
     color: #007bff;
     text-decoration: none;
   }
   
-  .create-account-link:hover {
+  .login-link:hover {
     text-decoration: underline;
   }
   </style>
