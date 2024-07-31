@@ -1,5 +1,4 @@
 <script setup> 
-import ErrorToast from "@/components/ErrorToast.vue";
 </script>
 
 <template>
