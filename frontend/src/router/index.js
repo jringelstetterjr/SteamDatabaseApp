@@ -1,12 +1,12 @@
 import { createRouter, createWebHistory } from 'vue-router';
 import AppLayout from '@/components/layout/AppLayout.vue';
 import HomieView from '@/views/HomieView.vue';
-import Friends from '@/views/FriendsView.vue';
-import Games from '@/views/GamesView.vue';
+import GameSearchView from '@/views/GameSearchView.vue';
 import LoginView from '@/views/LoginView.vue';
 import CreateView from '@/views/CreateView.vue';
 import UserView from '@/views/UserView.vue';
 import GameView from '@/views/GameView.vue';
+import UserSearch from '@/views/UserSearchView.vue';
 
 const routes = [
   {
@@ -31,15 +31,13 @@ const routes = [
       },
       {
         path: 'friends',
-        name: 'friendsView',
-        component: Friends,
-        meta: { requiresAuth: true }
+        name: 'userSearchView',
+        component: UserSearch // Update component
       },
       {
-        path: 'games',
-        name: 'gamesView',
-        component: Games,
-        meta: { requiresAuth: true }
+        path: 'game',
+        name: 'gameSearchView',
+        component: GameSearchView,
       },
       {
         path: 'user',
