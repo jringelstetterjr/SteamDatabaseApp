@@ -1,13 +1,16 @@
-package com.database.DAOs;
+package com.database.steam.DAOs;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.springframework.stereotype.Repository;
+
 import com.database.steam.MySQLConnection;
 import com.database.steam.DTOs.Game;
 
+@Repository
 public class GameDao {
     public List<Game> getAllGames() {
         List<Game> games = new ArrayList<>();

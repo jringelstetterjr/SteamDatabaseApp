@@ -5,7 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.database.DAOs.GameDao;
+import com.database.steam.DAOs.GameDao;
 import com.database.steam.DTOs.Game;
 
 @Service

@@ -1,10 +1,13 @@
-package com.database.DAOs;
+package com.database.steam.DAOs;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import org.springframework.stereotype.Repository;
+
 import com.database.steam.MySQLConnection;
 
+@Repository
 public class UserDao {
         public String createUser(String username, String password, String displayName) {
         MySQLConnection mySQLConnection = new MySQLConnection();

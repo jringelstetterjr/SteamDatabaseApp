@@ -1,12 +1,15 @@
-package com.database.DAOs;
+package com.database.steam.DAOs;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.springframework.stereotype.Repository;
+
 import com.database.steam.MySQLConnection;
 
+@Repository
 public class CreatorDao {
     public String getCreator(String name) {
         MySQLConnection mySQLConnection = new MySQLConnection();
