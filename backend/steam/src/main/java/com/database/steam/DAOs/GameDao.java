@@ -26,6 +26,21 @@ public class GameDao {
         return games;
     }
 
+    public List<Game> getMostFavorited() {
+        List<Game> games = new ArrayList<>();
+        MySQLConnection mySQLConnection = new MySQLConnection();
+        String sql = "SELECT g.Name, COUNT(uf.Username) AS favorite_count FROM user_favorites uf JOIN game g ON g.AppID = uf.AppID GROUP BY uf.AppID "
+                     + "ORDER BY favorite_count DESC LIMIT 5;";
+
+        try (ResultSet resultSet = mySQLConnection.executeQuery(sql)) {
+            games = getGamesFromResultSet(resultSet);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return games;
+    }
+
     public Game getGameInfo(String name) {
         Game game = null;
         MySQLConnection mySQLConnection = new MySQLConnection();
@@ -74,6 +89,20 @@ public class GameDao {
             
         return games;
 
+    }
+
+    public List<Game> getRecentGames(String creatorId) {
+        List<Game> games = new ArrayList<>();
+        MySQLConnection mySQLConnection = new MySQLConnection();
+        String sql = "SELECT * FROM game g JOIN creator c ON c.AppID = g.AppID WHERE c.CreatorID = ? ORDER BY g.ReleaseDate DESC LIMIT 10;";
+
+        try (ResultSet resultSet = mySQLConnection.executePreparedStatement(sql, new ArrayList<>(List.of(creatorId)))) {
+            games = getGamesFromResultSet(resultSet);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+            
+        return games;
     }
 
     private List<Game> getGamesFromResultSet(ResultSet resultSet) throws SQLException {

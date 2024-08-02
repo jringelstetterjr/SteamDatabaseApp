@@ -18,6 +18,10 @@ public class GameService {
         return gameDao.getAllGames();
     }
 
+    public List<Game> getMostFavorited() {
+        return gameDao.getMostFavorited();
+    }
+
     public Game getGameInfo(String name) {
         return gameDao.getGameInfo(name);
     }
@@ -28,5 +32,9 @@ public class GameService {
 
     public List<Game> getGamesWithScore(List<String> appIds) {
         return gameDao.getGamesWithScore(appIds);
+    }
+
+    public List<Game> getRecentGames(String creatorId) {
+        return gameDao.getRecentGames(creatorId);
     }
 }

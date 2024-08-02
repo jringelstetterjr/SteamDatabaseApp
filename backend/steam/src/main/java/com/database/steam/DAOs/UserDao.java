@@ -42,4 +42,43 @@ public class UserDao {
 
         return favorites;
     }
+
+    public String addFavorite(String username, String appId) {
+        MySQLConnection mySQLConnection = new MySQLConnection();
+        String sql = "INSERT INTO user_favorites (Username, AppID) VALUES (?, ?)";
+        int affectedRows = mySQLConnection.executeUpdatePreparedStatement(sql, new ArrayList<>(List.of(username, appId)));
+        
+        if (affectedRows > 0) {
+            return "Favorite added successfully";
+        } else {
+            return "Favorite addition failed";
+        }
+    }
+
+    public String removeFavorite(String username, String appId) {
+        MySQLConnection mySQLConnection = new MySQLConnection();
+        String sql = "DELETE FROM user_favorites WHERE Username = ? AND AppId = ?";
+        int affectedRows = mySQLConnection.executeUpdatePreparedStatement(sql, new ArrayList<>(List.of(username, appId)));
+        
+        if (affectedRows > 0) {
+            return "Favorite removed successfully";
+        } else {
+            return "Favorite removal failed";
+        }
+    }
+
+    public String addFriend(String username1, String username2) {
+        MySQLConnection mySQLConnection = new MySQLConnection();
+        String sql1 = "INSERT INTO user_friends (Username1, Username2) VALUES (?, ?)";
+        String sql2 = "INSERT INTO user_friends (Username1, Username2) VALUES (?, ?)";
+        
+        int affectedRows1 = mySQLConnection.executeUpdatePreparedStatement(sql1, new ArrayList<>(List.of(username1, username2)));
+        int affectedRows2 = mySQLConnection.executeUpdatePreparedStatement(sql2, new ArrayList<>(List.of(username2, username1)));
+        
+        if (affectedRows1 > 0 && affectedRows2 > 0) {
+            return "Friendship added successfully";
+        } else {
+            return "Friendship addition failed";
+        }  
+    }
 }

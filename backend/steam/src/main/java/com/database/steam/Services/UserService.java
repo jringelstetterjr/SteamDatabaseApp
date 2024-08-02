@@ -21,4 +21,16 @@ public class UserService {
     public List<Game> getUserFavorites(String username) {
         return userDao.getUserFavorites(username);
     }
+
+    public String addFavorite(String username, String appId) {
+        return userDao.addFavorite(username, appId);
+    }
+
+    public String removeFavorite(String username, String appId) {
+        return userDao.removeFavorite(username, appId);
+    }
+
+    public String addFriend(String username1, String username2) {
+        return userDao.addFriend(username1, username2);
+    }
 }
