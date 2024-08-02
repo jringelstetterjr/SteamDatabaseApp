@@ -8,7 +8,8 @@
       <div class="app-name">Steam Database Application</div>
       <div class="user-info">
         <router-link :to="{ name: 'userView' }" class="user-link">
-          {{ displayName }}
+          <h1 v:if v-if="username">{{ username }}</h1>
+          <p v-else>No user</p>
         </router-link>
         <img src="@/assets/userLogo.png" alt="User Logo" class="user-logo">
       </div>
@@ -16,21 +17,22 @@
   </template>
   
   <script>
+  import { computed } from 'vue';
+  import { useUserStore } from '@/store';
   export default {
     name: 'AppTopbar',
     props: {
       title: {
         type: String,
         required: true
-      },
-      displayName: {
-        type: String,
-        default: 'User'
-      },
-      userProfileLink: {
-        type: String,
-        default: '#'
       }
+    },
+    setup() {
+      const userStore = useUserStore();
+      const username = computed(() => userStore.username);
+      return {
+        username
+      };
     }
   }
   </script>

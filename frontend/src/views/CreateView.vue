@@ -34,6 +34,7 @@
   </template>
   
   <script>
+  import axios from 'axios';
   export default {
     name: 'CreateView',
     data() {
@@ -46,6 +47,22 @@
     methods: {
       createAccount() {
         console.log(`Display Name: ${this.displayName}, Username: ${this.username}, Password: ${this.password}`);
+        var apiUrl = 'http://localhost:8081/api/user/create-user/';
+        apiUrl = apiUrl.concat(this.username);
+        apiUrl = apiUrl.concat('/');
+        apiUrl = apiUrl.concat(this.password);
+        apiUrl = apiUrl.concat('/');
+        apiUrl = apiUrl.concat(this.displayName);
+        axios.post(apiUrl)
+        .then(response => {
+          console.log("Response.data:" + response.data);
+          if (response.data == "User created successfully") {
+            console.log("Account creation successful");
+            this.$router.push({ name: 'home-view' });
+          } else {
+            console.log("Account creation failed");
+          }
+        })
         // Simulate account creation and redirect to home
         this.$router.push({ name: 'home-view' });
       }
