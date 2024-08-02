@@ -1,6 +1,11 @@
 package com.database.steam.DTOs;
 
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+
+@Entity
 public class Score {
+    @Id
     private int scoreID;
     private int appId;
     private int scoreRank;

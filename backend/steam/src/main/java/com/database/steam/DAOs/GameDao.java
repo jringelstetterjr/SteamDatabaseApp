@@ -61,17 +61,31 @@ public class GameDao {
         return games;
     }
 
+    public List<Game> getGamesWithScore(List<String> appIds) {
+        List<Game> games = new ArrayList<>();
+        MySQLConnection mySQLConnection = new MySQLConnection();
+        String sql = "SELECT * FROM Game g JOIN Score s on g.AppId = s.AppId WHERE g.AppId in ?";
+
+        try (ResultSet resultSet = mySQLConnection.executePreparedStatement(sql, new ArrayList<>(appIds))) {
+            games = getGamesFromResultSet(resultSet);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+            
+        return games;
+
+    }
+
     private List<Game> getGamesFromResultSet(ResultSet resultSet) throws SQLException {
         List<Game> games = new ArrayList<>();
 
         while (resultSet.next()) {
-            Game game = new Game(resultSet.getInt("AppID"), resultSet.getString("Name"), resultSet.getString("Tags"),
-                    resultSet.getString("Description"), resultSet.getString("DLCCount"), resultSet.getString("Genres"),
-                    resultSet.getDate("ReleaseDate"), resultSet.getString("Categories"), resultSet.getBoolean("Windows"),
-                    resultSet.getBoolean("Mac"), resultSet.getBoolean("Linux"));
-            games.add(game);
+            games.add(new Game(resultSet.getInt("AppID"), resultSet.getString("Name"), resultSet.getString("Tags"),
+            resultSet.getString("Description"), resultSet.getString("DLCCount"), resultSet.getString("Genres"),
+            resultSet.getDate("ReleaseDate"), resultSet.getString("Categories"), resultSet.getBoolean("Windows"),
+            resultSet.getBoolean("Mac"), resultSet.getBoolean("Linux")));
         }
 
         return games;
-    }  
+    }
 }

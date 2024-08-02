@@ -1,6 +1,11 @@
 package com.database.steam.DTOs;
 
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+
+@Entity
 public class Creator {
+    @Id
     private int creatorID;
     private int appId;
     private String supportEmail;

@@ -6,6 +6,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import com.database.steam.DTOs.Creator;
 import com.database.steam.DTOs.Game;
@@ -13,6 +14,7 @@ import com.database.steam.Services.CreatorService;
 import com.database.steam.Services.GameService;
 
 @RestController
+@RequestMapping("/api/games")
 public class SteamController {
 
     @Autowired
@@ -34,6 +36,11 @@ public class SteamController {
     @GetMapping("/reccomendations/{name}")
     public List<Game> getReccomendations(@PathVariable("name") String name) throws SQLException {
         return gameService.getRecommendations(name);
+    }
+
+    @GetMapping("/get-game-scores/{appIds}")
+    public List<Game> getGameScores(@PathVariable("appIds") List<String> appIds) {
+        return gameService.getGamesWithScore(appIds);
     }
 
     @GetMapping("/get-creator/{name}")

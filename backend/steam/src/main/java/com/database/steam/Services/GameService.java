@@ -25,4 +25,8 @@ public class GameService {
     public List<Game> getRecommendations(String name) {
         return gameDao.getRecommendations(name);
     }
+
+    public List<Game> getGamesWithScore(List<String> appIds) {
+        return gameDao.getGamesWithScore(appIds);
+    }
 }
