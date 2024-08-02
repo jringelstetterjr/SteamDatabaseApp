@@ -1,8 +1,8 @@
 <template>
     <div class="sidebar">
       <ul>
-        <li @click="navigateTo('friendsView')">Friends</li>
-        <li @click="navigateTo('gamesView')">Games</li>
+        <li @click="navigateTo('userSearchView')">Friends</li>
+        <li @click="navigateTo('gameSearchView')">Games</li>
       </ul>
     </div>
   </template>
