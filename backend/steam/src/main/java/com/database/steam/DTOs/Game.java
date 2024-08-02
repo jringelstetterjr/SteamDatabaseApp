@@ -2,7 +2,12 @@ package com.database.steam.DTOs;
 
 import java.sql.Date;
 
+import jakarta.persistence.Id;
+import jakarta.persistence.Entity;
+
+@Entity
 public class Game {
+    @Id
     private int appID;
     private String name;
     private String tags;
