@@ -42,4 +42,17 @@ public class UserDao {
 
         return favorites;
     }
+
+    public boolean validateUser(String username, String password) {
+        MySQLConnection mySQLConnection = new MySQLConnection();
+        String sql = "SELECT * FROM user WHERE Username = ? AND Password = ?";
+        
+        try (ResultSet resultSet = mySQLConnection.executePreparedStatement(sql, new ArrayList<>(List.of(username, password)))) {
+            return resultSet.next();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return false;
+    }
 }

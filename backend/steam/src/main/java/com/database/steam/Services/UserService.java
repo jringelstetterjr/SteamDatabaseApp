@@ -21,4 +21,8 @@ public class UserService {
     public List<Game> getUserFavorites(String username) {
         return userDao.getUserFavorites(username);
     }
+
+    public boolean validateUser(String username, String password) {
+        return userDao.validateUser(username, password);
+    }
 }

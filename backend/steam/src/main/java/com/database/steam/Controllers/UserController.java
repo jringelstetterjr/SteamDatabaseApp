@@ -28,4 +28,9 @@ public class UserController {
     public List<Game> getUserFavorites(@PathVariable("username") String username) {
         return userService.getUserFavorites(username);
     }
+
+    @GetMapping("/validate-user/{username}/{password}")
+    public boolean validateUser(@PathVariable("username") String username, @PathVariable("password") String password) {
+        return userService.validateUser(username, password);
+    }
 }

@@ -26,6 +26,8 @@
   </template>
   
   <script>
+  import axios from 'axios';
+
   export default {
     name: 'LoginView',
     data() {
@@ -37,8 +39,23 @@
     methods: {
       login() {
         console.log(`Username: ${this.username}, Password: ${this.password}`);
+        var apiUrl = 'http://localhost:8081/api/user/validate-user/';
+        apiUrl = apiUrl.concat(this.username);
+        apiUrl = apiUrl.concat('/');
+        apiUrl = apiUrl.concat(this.password);
+        console.log(apiUrl);
+        axios.get(apiUrl)
+        .then(response => {
+          console.log("Response.data:" + response.data);
+          if (response.data == true) {
+            console.log("Login successful");
+            this.$router.push({ name: 'home-view' });
+          } else {
+            console.log("Login failed");
+          }
+        })
         // Simulate login and redirect to home
-        this.$router.push({ name: 'home-view' });
+        //this.$router.push({ name: 'home-view' });
       }
     }
   }
