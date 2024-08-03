@@ -40,13 +40,13 @@
           <button @click="searchSingleGame" class="search-button">Search Single Game</button>
         </div>
         <div class="results-window">
-          <v-data-table
-            :headers="headers"
-            :items="games"
-            :search="game"
-            :items-per-page="5"
-            class="elevation-1" >
-          </v-data-table>
+          <vue-good-table
+          :columns="columns"
+          :rows="games"
+          :search-options="{ enabled: true }"
+          :pagination-options="{ enabled: true, perPage: 5 }"
+          class="vgt-table"
+        />
           <!-- Results will go here -->
         </div>
       </div>
@@ -55,6 +55,7 @@
   
   <script>
 import axios from 'axios';
+import "vue-good-table/dist/vue-good-table.css";
 
   export default {
     name: 'GameSearchView',
@@ -70,18 +71,18 @@ import axios from 'axios';
         publisher: '',
         score: 'highest',
         games: [],
-        headers: [
-          { text: 'appID', value: 'appID' },
-          { text: 'Name', value: 'name' },
-          { text: 'Description', value: 'description' },
-          { text: 'Genre', value: 'genres' },
-          { text: 'Tags', value: 'tags' },
-          { text: 'DLC', value: 'dlcCount' },
-          { text: 'Release Date', value: 'releaseDate' },
-          { text: 'Categories', value: 'categories' },
-          { text: 'Windows', value: 'windows' },
-          { text: 'Linux', value: 'linux' },
-          { text: 'Mac', value: 'mac' }
+        columns: [
+          { label: 'appID', field: 'appID', type:"number" },
+          { label: 'Name', field: 'name' },
+          { label: 'Description', field: 'description' },
+          { label: 'Genre', field: 'genres' },
+          { label: 'Tags', field: 'tags' },
+          { label: 'DLC', field: 'dlcCount', type:"number" },
+          { label: 'Release Date', field: 'releaseDate' },
+          { label: 'Categories', field: 'categories' },
+          { label: 'Windows', field: 'windows', type:"boolean" },
+          { label: 'Linux', field: 'linux', type:"boolean" },
+          { label: 'Mac', field: 'mac', type:"boolean" }
         ]
       }
     },
@@ -93,10 +94,12 @@ import axios from 'axios';
         axios.get(apiUrl)
         .then(response => {
           console.log("Response.data:" + response.data);
-          if (response.data == true) {
+          if (response.data) {
             console.log("Game found");
-            this.games = response.data;
+            response.data.releaseDate = new Date(response.data.releaseDate).toLocaleDateString();
+            this.games = [response.data];
           } else {
+            this.games = [];
             console.log("Game not found");
           }
         })
