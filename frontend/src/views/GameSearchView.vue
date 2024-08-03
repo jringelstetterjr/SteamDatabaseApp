@@ -37,9 +37,16 @@
             </select>
           </details>
           
-          <button @click="search" class="search-button">Search</button>
+          <button @click="searchSingleGame" class="search-button">Search Single Game</button>
         </div>
         <div class="results-window">
+          <v-data-table
+            :headers="headers"
+            :items="games"
+            :search="game"
+            :items-per-page="5"
+            class="elevation-1" >
+          </v-data-table>
           <!-- Results will go here -->
         </div>
       </div>
@@ -47,6 +54,8 @@
   </template>
   
   <script>
+import axios from 'axios';
+
   export default {
     name: 'GameSearchView',
     data() {
@@ -60,19 +69,37 @@
         developer: '',
         publisher: '',
         score: 'highest',
+        games: [],
+        headers: [
+          { text: 'appID', value: 'appID' },
+          { text: 'Name', value: 'name' },
+          { text: 'Description', value: 'description' },
+          { text: 'Genre', value: 'genres' },
+          { text: 'Tags', value: 'tags' },
+          { text: 'DLC', value: 'dlcCount' },
+          { text: 'Release Date', value: 'releaseDate' },
+          { text: 'Categories', value: 'categories' },
+          { text: 'Windows', value: 'windows' },
+          { text: 'Linux', value: 'linux' },
+          { text: 'Mac', value: 'mac' }
+        ]
       }
     },
     methods: {
-      search() {
+      searchSingleGame() {
         console.log(`Game: ${this.game}`);
-        console.log(`Description: ${this.description}`);
-        console.log(`Genre: ${this.genre}`);
-        console.log(`Tags: ${this.tags}`);
-        console.log(`Number of DLC: ${this.dlc}`);
-        console.log(`Release Date: ${this.releaseDate}`);
-        console.log(`Developer: ${this.developer}`);
-        console.log(`Publisher: ${this.publisher}`);
-        console.log(`Score: ${this.score}`);
+        var apiUrl = 'http://localhost:8081/api/games/game-info/';
+        apiUrl = apiUrl.concat(this.game);
+        axios.get(apiUrl)
+        .then(response => {
+          console.log("Response.data:" + response.data);
+          if (response.data == true) {
+            console.log("Game found");
+            this.games = response.data;
+          } else {
+            console.log("Game not found");
+          }
+        })
       }
     }
   }
