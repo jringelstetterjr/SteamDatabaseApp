@@ -1,6 +1,5 @@
 package com.database.steam.Controllers;
 
-import java.sql.SQLException;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,7 +7,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import com.database.steam.DTOs.Creator;
 import com.database.steam.DTOs.Game;
 import com.database.steam.Services.CreatorService;
 import com.database.steam.Services.GameService;
@@ -24,17 +22,22 @@ public class SteamController {
     private CreatorService creatorService;
 
     @GetMapping("/all-games")
-    public List<Game> testConnection() throws SQLException {
+    public List<Game> testConnection() {
         return gameService.getAllGames();
     }
 
+    @GetMapping("/get-most-favorited")
+    public List<Game> getMostFavorited() {
+        return gameService.getMostFavorited();
+    }
+
     @GetMapping("/game-info/{name}")
-    public Game getGameInfo(@PathVariable("name") String name) throws SQLException {
+    public Game getGameInfo(@PathVariable("name") String name) {
         return gameService.getGameInfo(name);
     }
 
     @GetMapping("/reccomendations/{name}")
-    public List<Game> getReccomendations(@PathVariable("name") String name) throws SQLException {
+    public List<Game> getReccomendations(@PathVariable("name") String name) {
         return gameService.getRecommendations(name);
     }
 
@@ -43,8 +46,8 @@ public class SteamController {
         return gameService.getGamesWithScore(appIds);
     }
 
-    @GetMapping("/get-creator/{name}")
-    public String getCreator(@PathVariable("name") String name) {
-        return creatorService.getCreator(name);
+    @GetMapping("/recent-games/{creatorId}")
+    public List<Game> getRecentGames(@PathVariable("creatorId") String creatorId) {
+        return gameService.getRecentGames(creatorId);
     }
 }

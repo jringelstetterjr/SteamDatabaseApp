@@ -3,6 +3,7 @@ package com.database.steam.Controllers;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -32,5 +33,20 @@ public class UserController {
     @GetMapping("/validate-user/{username}/{password}")
     public boolean validateUser(@PathVariable("username") String username, @PathVariable("password") String password) {
         return userService.validateUser(username, password);
+    }
+
+    @PostMapping("/add-favorite/{username}/{appId}")
+    public String addFavorite(@PathVariable("username") String username, @PathVariable("appId") String appId) {
+        return userService.addFavorite(username, appId);
+    }
+
+    @DeleteMapping("/remove-favorite/{username}/{appId}")
+    public String removeFavorite(@PathVariable("username") String username, @PathVariable("appId") String appId) {
+        return userService.removeFavorite(username, appId);
+    }
+
+    @PostMapping("/add-friend/{username1}/{username2}")
+    public String addFriend(@PathVariable("username1") String username1, @PathVariable("username2") String username2) {
+        return userService.addFriend(username1, username2);
     }
 }

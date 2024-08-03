@@ -25,4 +25,16 @@ public class UserService {
     public boolean validateUser(String username, String password) {
         return userDao.validateUser(username, password);
     }
+
+    public String addFavorite(String username, String appId) {
+        return userDao.addFavorite(username, appId);
+    }
+
+    public String removeFavorite(String username, String appId) {
+        return userDao.removeFavorite(username, appId);
+    }
+
+    public String addFriend(String username1, String username2) {
+        return userDao.addFriend(username1, username2);
+    }
 }
