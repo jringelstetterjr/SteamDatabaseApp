@@ -1,6 +1,6 @@
 <template>
   <div class="user-view">
-    <h1 class="profile-header">User's Profile: <span class="username">username</span></h1>
+    <h1 class="profile-header">User's Profile: <span class="username" v:if v-if="username">{{ username }}</span></h1>
     <div class="profile-columns">
       <div class="column">
         <h2>Favorites</h2>
@@ -22,12 +22,16 @@
 </template>
 
 <script>
+import { computed } from 'vue';
+import { useUserStore } from '@/store';
 export default {
   name: 'UserView',
-  data() {
+  setup() {
+    const userStore = useUserStore();
+    const username = computed(() => userStore.username);
     return {
-      username: 'mockUsername' // This will be replaced with real data later
-    }
+      username
+    };
   }
 }
 </script>
