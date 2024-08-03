@@ -6,7 +6,7 @@
         <label for="username" class="form-label">Username:</label>
         <input
           id="username"
-          v-model="username"
+          v-model="usernameInput"
           type="text"
           class="form-input"
           placeholder="Enter your username"
@@ -26,19 +26,44 @@
   </template>
   
   <script>
+  import axios from 'axios';
+  import { useUserStore } from '../store';
+
   export default {
     name: 'LoginView',
     data() {
       return {
-        username: '',
+        usernameInput: '',
         password: ''
       }
     },
+    setup() {
+      const userStore = useUserStore();
+
+      return {
+        userStore
+      };
+    },
     methods: {
       login() {
-        console.log(`Username: ${this.username}, Password: ${this.password}`);
-        // Simulate login and redirect to home
-        this.$router.push({ name: 'home-view' });
+        console.log(`Username: ${this.usernameInput}, Password: ${this.password}`);
+        var apiUrl = 'http://localhost:8081/api/user/validate-user/';
+        apiUrl = apiUrl.concat(this.usernameInput);
+        apiUrl = apiUrl.concat('/');
+        apiUrl = apiUrl.concat(this.password);
+        console.log(apiUrl);
+        axios.get(apiUrl)
+        .then(response => {
+          console.log("Response.data:" + response.data);
+          if (response.data == true) {
+            console.log("Login successful");
+            this.userStore.setUsername(this.usernameInput);
+            console.log(this.userStore.getUsername);
+            this.$router.push({ name: 'home-view' });        
+          } else {
+            console.log("Login failed");
+          }
+        })
       }
     }
   }

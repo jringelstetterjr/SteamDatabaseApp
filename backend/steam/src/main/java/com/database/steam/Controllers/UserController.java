@@ -30,6 +30,11 @@ public class UserController {
         return userService.getUserFavorites(username);
     }
 
+    @GetMapping("/validate-user/{username}/{password}")
+    public boolean validateUser(@PathVariable("username") String username, @PathVariable("password") String password) {
+        return userService.validateUser(username, password);
+    }
+
     @PostMapping("/add-favorite/{username}/{appId}")
     public String addFavorite(@PathVariable("username") String username, @PathVariable("appId") String appId) {
         return userService.addFavorite(username, appId);
