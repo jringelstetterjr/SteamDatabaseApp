@@ -11,7 +11,7 @@
             class="search-input"
             placeholder="Enter username"
           />
-          <label for="displayUser" class="search-label">Display User:</label>
+          <label for="displayName" class="search-label">Display User:</label>
           <input
             id="displayUser"
             v-model="displayUser"
@@ -23,24 +23,64 @@
         </div>
         <div class="results-window">
           <!-- Future data table for results will be here -->
+          <vue-good-table
+          :columns="columns"
+          :rows="users"
+          :search-options="{ enabled: true }"
+          :pagination-options="{ enabled: true, perPage: 5 }"
+          class="vgt-table"
+          />
         </div>
+
+        
       </div>
     </div>
   </template>
   
   <script>
+
+import axios from 'axios';
+import "vue-good-table/dist/vue-good-table.css";
+
   export default {
     name: 'UserSearch',
     data() {
       return {
         username: '',
-        displayUser: ''
+        displayName: '',
+        users: [],
+        columns: [
+          { label: 'Username', field: 'username' },
+          { label: 'Dislay Name', field: 'displayName' },
+        ]
       }
     },
     methods: {
       search() {
-        console.log(`Username: ${this.username}, Display User: ${this.displayUser}`);
+        console.log(`Username: ${this.username}, Display Name: ${this.displayName}`);
+        let apiUrl = 'http://localhost:8081/api/user/get-users';
+
+        axios.get(apiUrl, {
+          params: {
+            username: this.username,
+            displayName: this.displayName
+          }
+        })
+        .then(response => {
+          console.log("Response.data:", response.data);
+          if (response.data) {
+            console.log("User(s) found");
+            this.users = response.data; // Assuming response.data is an array
+          } else {
+            this.users = [];
+            console.log("User(s) not found");
+          }
+        })
+        .catch(error => {
+          console.error("There was an error fetching the users:", error);
+        });
       }
+
     }
   }
   </script>

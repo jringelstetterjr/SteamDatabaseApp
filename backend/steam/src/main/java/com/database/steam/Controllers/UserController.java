@@ -8,9 +8,11 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.database.steam.DTOs.Game;
+import com.database.steam.DTOs.User;
 import com.database.steam.Services.UserService;
 
 @RestController
@@ -49,4 +51,11 @@ public class UserController {
     public String addFriend(@PathVariable("username1") String username1, @PathVariable("username2") String username2) {
         return userService.addFriend(username1, username2);
     }
+
+    @GetMapping("/get-users")
+    public List<User> getUsers(@RequestParam(value = "username", required = false) String username,
+                               @RequestParam(value = "displayName", required = false) String displayName) {
+        return userService.getUsers(username, displayName);
+    }
+
 }

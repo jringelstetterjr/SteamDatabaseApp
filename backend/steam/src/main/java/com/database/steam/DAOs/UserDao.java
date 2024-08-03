@@ -9,6 +9,7 @@ import org.springframework.stereotype.Repository;
 
 import com.database.steam.MySQLConnection;
 import com.database.steam.DTOs.Game;
+import com.database.steam.DTOs.User;
 
 @Repository
 public class UserDao {
@@ -94,4 +95,46 @@ public class UserDao {
             return "Friendship addition failed";
         }  
     }
+
+    public List<User> getUsers(String username, String displayName) {
+        MySQLConnection mySQLConnection = new MySQLConnection();
+        StringBuilder sqlBuilder = new StringBuilder("SELECT * FROM user");
+        List<String> parameters = new ArrayList<>();
+        
+        // Build the WHERE clause based on provided parameters
+        if (username != null && !username.isEmpty() || displayName != null && !displayName.isEmpty()) {
+            sqlBuilder.append(" WHERE ");
+            boolean firstCondition = true;
+    
+            if (username != null && !username.isEmpty()) {
+                sqlBuilder.append("Username = ?");
+                parameters.add(username);
+                firstCondition = false;
+            }
+    
+            if (displayName != null && !displayName.isEmpty()) {
+                if (!firstCondition) {
+                    sqlBuilder.append(" AND ");
+                }
+                sqlBuilder.append("DisplayName = ?");
+                parameters.add(displayName);
+            }
+        }
+    
+        String sql = sqlBuilder.toString();
+        List<User> users = new ArrayList<>();
+    
+        try (ResultSet resultSet = mySQLConnection.executePreparedStatement(sql, parameters)) {
+            while (resultSet.next()) {
+                //we shouldn't display a user's password at any point,
+                //so the password will be set as "encrypted" in case the returned user's password is attempted to be accessed
+                users.add(new User(resultSet.getString("Username"),"encrypted", resultSet.getString("DisplayName")));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    
+        return users;
+    }
+       
 }
