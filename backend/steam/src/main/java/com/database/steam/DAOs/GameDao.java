@@ -9,6 +9,8 @@ import org.springframework.stereotype.Repository;
 
 import com.database.steam.MySQLConnection;
 import com.database.steam.DTOs.Game;
+import com.database.steam.DTOs.GameWithScore;
+import com.database.steam.DTOs.MostFavoritedGame;
 
 @Repository
 public class GameDao {
@@ -29,8 +31,8 @@ public class GameDao {
     public List<Game> getMostFavorited() {
         List<Game> games = new ArrayList<>();
         MySQLConnection mySQLConnection = new MySQLConnection();
-        String sql = "SELECT g.Name, COUNT(uf.Username) AS favorite_count FROM user_favorites uf JOIN game g ON g.AppID = uf.AppID GROUP BY uf.AppID "
-                     + "ORDER BY favorite_count DESC LIMIT 5;";
+        String sql = "SELECT g.*, COUNT(uf.Username) AS favorite_count FROM user_favorites uf JOIN game g ON g.AppID = uf.AppID GROUP BY uf.AppID "
+                     + "ORDER BY favorite_count DESC LIMIT 10;";
 
         try (ResultSet resultSet = mySQLConnection.executeQuery(sql)) {
             games = getGamesFromResultSet(resultSet);
@@ -76,13 +78,19 @@ public class GameDao {
         return games;
     }
 
-    public List<Game> getGamesWithScore(List<String> appIds) {
-        List<Game> games = new ArrayList<>();
+    public List<GameWithScore> getGamesWithScore(List<String> appIds) {
+        List<GameWithScore> games = new ArrayList<>();
         MySQLConnection mySQLConnection = new MySQLConnection();
-        String sql = "SELECT * FROM Game g JOIN Score s on g.AppId = s.AppId WHERE g.AppId in ?";
+        StringBuilder sql = new StringBuilder("SELECT * FROM Game g JOIN Score s on g.AppId = s.AppId WHERE g.AppId in (?");
 
-        try (ResultSet resultSet = mySQLConnection.executePreparedStatement(sql, new ArrayList<>(appIds))) {
-            games = getGamesFromResultSet(resultSet);
+        for (int i = 1; i < appIds.size(); i++) {
+            sql.append(", ?");
+        }
+
+        sql.append(")");
+
+        try (ResultSet resultSet = mySQLConnection.executePreparedStatement(sql.toString(), new ArrayList<>(appIds))) {
+            games = getGamesWithScoreFromResultSet(resultSet);
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -94,7 +102,8 @@ public class GameDao {
     public List<Game> getRecentGames(String creatorId) {
         List<Game> games = new ArrayList<>();
         MySQLConnection mySQLConnection = new MySQLConnection();
-        String sql = "SELECT * FROM game g JOIN creator c ON c.AppID = g.AppID WHERE c.CreatorID = ? ORDER BY g.ReleaseDate DESC LIMIT 10;";
+        String sql = "SELECT g.* FROM game g JOIN creator c ON c.AppID = g.AppID WHERE c.Developers LIKE (SELECT Developers FROM creator " 
+        + " WHERE CreatorID = ?) ORDER BY g.ReleaseDate DESC LIMIT 10;";
 
         try (ResultSet resultSet = mySQLConnection.executePreparedStatement(sql, new ArrayList<>(List.of(creatorId)))) {
             games = getGamesFromResultSet(resultSet);
@@ -102,6 +111,21 @@ public class GameDao {
             e.printStackTrace();
         }
             
+        return games;
+    }
+
+    public List<MostFavoritedGame> getLeaderboard() {
+        List<MostFavoritedGame> games = new ArrayList<>();
+        MySQLConnection mySQLConnection = new MySQLConnection();
+        String sql = "SELECT g.Name, COUNT(uf.Username) AS favorite_count FROM user_favorites uf " 
+            + " JOIN game g ON g.AppID = uf.AppID GROUP BY uf.AppID ORDER BY favorite_count DESC LIMIT 5";
+
+        try (ResultSet resultSet = mySQLConnection.executeQuery(sql)) {
+            games = getMostFavoritedGamesFromResultSet(resultSet);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
         return games;
     }
 
@@ -113,6 +137,29 @@ public class GameDao {
             resultSet.getString("Description"), resultSet.getString("DLCCount"), resultSet.getString("Genres"),
             resultSet.getDate("ReleaseDate"), resultSet.getString("Categories"), resultSet.getBoolean("Windows"),
             resultSet.getBoolean("Mac"), resultSet.getBoolean("Linux")));
+        }
+
+        return games;
+    }
+    private List<GameWithScore> getGamesWithScoreFromResultSet(ResultSet resultSet) throws SQLException {
+        List<GameWithScore> games = new ArrayList<>();
+
+        while (resultSet.next()) {
+            games.add(new GameWithScore(resultSet.getInt("AppID"), resultSet.getString("Name"),
+            resultSet.getString("DLCCount"), resultSet.getString("Genres"),
+            resultSet.getDate("ReleaseDate"), resultSet.getBoolean("Windows"),
+            resultSet.getBoolean("Mac"), resultSet.getBoolean("Linux"), resultSet.getInt("ScoreRank"),
+            resultSet.getInt("Positive"), resultSet.getInt("Negative")));
+        }
+
+        return games;
+    }
+
+    private List<MostFavoritedGame> getMostFavoritedGamesFromResultSet(ResultSet resultSet) throws SQLException {
+        List<MostFavoritedGame> games = new ArrayList<>();
+
+        while (resultSet.next()) {
+            games.add(new MostFavoritedGame(resultSet.getString("Name"), resultSet.getInt("favorite_count")));
         }
 
         return games;

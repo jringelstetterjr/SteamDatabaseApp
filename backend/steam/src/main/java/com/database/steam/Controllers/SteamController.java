@@ -8,6 +8,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import com.database.steam.DTOs.Game;
+import com.database.steam.DTOs.GameWithScore;
+import com.database.steam.DTOs.MostFavoritedGame;
 import com.database.steam.Services.CreatorService;
 import com.database.steam.Services.GameService;
 
@@ -42,12 +44,16 @@ public class SteamController {
     }
 
     @GetMapping("/get-game-scores/{appIds}")
-    public List<Game> getGameScores(@PathVariable("appIds") List<String> appIds) {
+    public List<GameWithScore> getGameScores(@PathVariable("appIds") List<String> appIds) {
         return gameService.getGamesWithScore(appIds);
     }
 
     @GetMapping("/recent-games/{creatorId}")
     public List<Game> getRecentGames(@PathVariable("creatorId") String creatorId) {
         return gameService.getRecentGames(creatorId);
+    }
+    @GetMapping("/get-leaderboard")
+    public List<MostFavoritedGame> getLeaderboard() {
+        return gameService.getLeaderboard();
     }
 }

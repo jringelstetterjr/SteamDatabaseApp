@@ -7,10 +7,14 @@ import CreateView from '@/views/CreateView.vue';
 import UserView from '@/views/UserView.vue';
 import GameView from '@/views/GameView.vue';
 import UserSearch from '@/views/UserSearchView.vue';
+import ScoreSearchView from '@/views/ScoreSearchView.vue';
+import RecommendationsSearchView from '@/views/RecommendationsSearchView.vue';
+import CreatorSearchView from '@/views/CreatorSearchView.vue';
+import LeaderboardView from '@/views/LeaderboardView.vue';
 
 const routes = [
   {
-    path: '/login',
+    path: '/',
     name: 'login',
     component: LoginView
   },
@@ -24,7 +28,7 @@ const routes = [
     component: AppLayout,
     children: [
       {
-        path: '', // Home view at the root path
+        path: 'home', // Home view at the root path
         name: 'home-view',
         component: HomieView,
         meta: { requiresAuth: true }
@@ -48,6 +52,26 @@ const routes = [
         path: 'game',
         name: 'game-view',
         component: GameView,
+      },
+      {
+        path: 'recommendations',
+        name: 'recommendationsSearchView',
+        component: RecommendationsSearchView,
+      },
+      {
+        path: 'score',
+        name: 'scoreSearchView',
+        component: ScoreSearchView,
+      },
+      {
+        path: 'creator',
+        name: 'creatorSearchView',
+        component: CreatorSearchView,
+      },
+      {
+        path: 'leaderboard',
+        name: 'leaderboardView',
+        component: LeaderboardView,
       }
     ]
   }

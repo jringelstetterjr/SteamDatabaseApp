@@ -1,20 +1,8 @@
 <template>
     <div class="home">
-        <h1>Welcome to our website!</h1>
-        <p>Feel free to explore and discover amazing content.</p>
         <div class="table-container">
             <div class="table-wrapper">
-                <h2>Top Creators</h2>
-                <vue-good-table
-                :columns="columnsCreators"
-                :rows="creators"
-                :search-options="{ enabled: true }"
-                :pagination-options="{ enabled: true, perPage: 10 }"
-                class="vgt-table"
-                />
-            </div>
-            <div class="table-wrapper">
-                <h2> Top Rated Games By Our Users</h2>
+                <h3> Game Leaderboard</h3>
                 <vue-good-table
                 :columns="columnsTopGames"
                 :rows="games"
@@ -45,21 +33,10 @@ export default {
     name: 'HomieView',
     data() {
       return {
-        creators: [],
-        columnsCreators: [
-          { label: 'Publishers', field: 'publishers' },
-          { label: 'Positive Reviews', field: 'reviews', type:"number"  }
-        ],
         games: [],
         columnsTopGames: [
-          { label: 'App ID', field: 'appID' },
           { label: 'Name', field: 'name' },
-          { label: 'Genre', field: 'genres' },
-          { label: 'DLC', field: 'dlcCount', type:"number" },
-          { label: 'Release Date', field: 'releaseDate' },
-          { label: 'Windows', field: 'windows', type:"boolean" },
-          { label: 'Linux', field: 'linux', type:"boolean" },
-          { label: 'Mac', field: 'mac', type:"boolean" },
+          { label: 'Favorite Count', field: 'favoritedCount', type: "number" },
           {
             label: 'Favorites',
             field: 'actions',
@@ -71,35 +48,17 @@ export default {
       }
     },
     methods: {
-      getTopRatedCreators() {
-        var apiUrl = 'http://localhost:8081/api/creator/top-creators';
+      getMostFavorited() {
+        var apiUrl = 'http://localhost:8081/api/games/get-leaderboard';
         axios.get(apiUrl)
         .then(response => {
           console.log("Response.data:" + response.data);
           if (response.data) {
             console.log("Creator found");
-            this.creators = response.data;
-          } else {
-            this.creators = [];
-            console.log("Game not found");
-          }
-        })
-      },
-      getMostFavorited() {
-        console.log("Getting most favorited games");
-        var apiUrl = 'http://localhost:8081/api/games/get-most-favorited';
-        axios.get(apiUrl)
-        .then(response => {
-          console.log("Response.data:" + response.data);
-          if (response.data) {
-            console.log("Games found");
-            response.data.forEach(game => {
-              game.releaseDate = new Date(game.releaseDate).toLocaleDateString();
-            });
             this.games = response.data;
           } else {
             this.games = [];
-            console.log("Games not found");
+            console.log("Game not found");
           }
         })
       },
@@ -120,7 +79,6 @@ export default {
       }
     },
     mounted() {
-        this.getTopRatedCreators();
         this.getMostFavorited();
     },
     setup() {

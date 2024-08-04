@@ -1,11 +1,11 @@
 <template>
     <div class="gameSearchView">
-      <h1 class="header">Game Search</h1>
+      <h1 class="header">Recommendations Search</h1>
       <div class="search-results">
         <div class="search-window">
           <label for="game" class="form-label">Name:</label>
           <input id="game" v-model="game" type="text" class="form-input" placeholder="Search by game name" />
-          <button @click="searchSingleGame" class="search-button">Search Games</button>
+          <button @click="searchRecommendations" class="search-button">Find Recommendations!</button>
         </div>
         <div class="results-window">
           <vue-good-table
@@ -42,12 +42,9 @@ import "vue-good-table/dist/vue-good-table.css";
         columns: [
           { label: 'appID', field: 'appID', type:"number" },
           { label: 'Name', field: 'name' },
-          { label: 'Description', field: 'description' },
           { label: 'Genre', field: 'genres' },
-          { label: 'Tags', field: 'tags' },
           { label: 'DLC', field: 'dlcCount', type:"number" },
           { label: 'Release Date', field: 'releaseDate' },
-          { label: 'Categories', field: 'categories' },
           { label: 'Windows', field: 'windows', type:"boolean" },
           { label: 'Linux', field: 'linux', type:"boolean" },
           { label: 'Mac', field: 'mac', type:"boolean" }
@@ -55,9 +52,9 @@ import "vue-good-table/dist/vue-good-table.css";
       }
     },
     methods: {
-      searchSingleGame() {
+      searchRecommendations() {
         console.log(`Game: ${this.game}`);
-        var apiUrl = 'http://localhost:8081/api/games/game-info/';
+        var apiUrl = 'http://localhost:8081/api/games/reccomendations/';
         apiUrl = apiUrl.concat(this.game);
         axios.get(apiUrl)
         .then(response => {
@@ -65,7 +62,7 @@ import "vue-good-table/dist/vue-good-table.css";
           if (response.data) {
             console.log("Game found");
             response.data.releaseDate = new Date(response.data.releaseDate).toLocaleDateString();
-            this.games = [response.data];
+            this.games = response.data;
           } else {
             this.games = [];
             console.log("Game not found");

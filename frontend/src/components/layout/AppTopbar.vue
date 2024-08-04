@@ -1,7 +1,7 @@
 <template>
     <div class="topbar">
       <!-- Router link for logo -->
-      <router-link to="/" class="app-logo-link">
+      <router-link to="/home" class="app-logo-link">
         <img src="@/assets/steamLogo.png" alt="App Logo" class="app-logo">
       </router-link>
       <h1>{{ title }}</h1>

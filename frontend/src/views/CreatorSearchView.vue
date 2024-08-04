@@ -1,15 +1,35 @@
 <template>
     <div class="gameSearchView">
-      <h1 class="header">Game Search</h1>
+      <h1 class="header">Creator Search</h1>
       <div class="search-results">
         <div class="search-window">
           <label for="game" class="form-label">Name:</label>
           <input id="game" v-model="game" type="text" class="form-input" placeholder="Search by game name" />
-          <button @click="searchSingleGame" class="search-button">Search Games</button>
+          <button @click="searchCreator" class="search-button">Search Creators</button>
         </div>
         <div class="results-window">
           <vue-good-table
-          :columns="columns"
+          :columns="creatorsColumns"
+          :rows="creators"
+          :search-options="{ enabled: true }"
+          :pagination-options="{ enabled: true, perPage: 5 }"
+          class="vgt-table"
+        />
+          <!-- Results will go here -->
+        </div>
+      </div>
+    </div>
+    <div class="creatorRecentGamesSearchView">
+      <h1 class="header">Search Recent Games By Creator</h1>
+      <div class="search-results">
+        <div class="search-window">
+          <label for="game" class="form-label">Creator ID:</label>
+          <input id="creatorId" v-model="creatorId" type="text" class="form-input" placeholder="Search by Creator ID" />
+          <button @click="searchRecentGames" class="search-button">Search Creators</button>
+        </div>
+        <div class="results-window">
+          <vue-good-table
+          :columns="gamesColumns"
           :rows="games"
           :search-options="{ enabled: true }"
           :pagination-options="{ enabled: true, perPage: 5 }"
@@ -38,13 +58,20 @@ import "vue-good-table/dist/vue-good-table.css";
         developer: '',
         publisher: '',
         score: 'highest',
+        creators: [],
+        creatorsColumns: [
+          { label: 'Creator ID', field: 'creatorID', type:"number" },
+          { label: 'Support Email', field: 'supportEmail' },
+          { label: 'Publishers', field: 'publishers' },
+          { label: 'Developers', field: 'developers' },
+          { label: 'Support URL', field: 'supportUrl' },
+          { label: 'App ID', field: 'appId' },
+        ],
         games: [],
-        columns: [
+        gamesColumns: [
           { label: 'appID', field: 'appID', type:"number" },
           { label: 'Name', field: 'name' },
-          { label: 'Description', field: 'description' },
           { label: 'Genre', field: 'genres' },
-          { label: 'Tags', field: 'tags' },
           { label: 'DLC', field: 'dlcCount', type:"number" },
           { label: 'Release Date', field: 'releaseDate' },
           { label: 'Categories', field: 'categories' },
@@ -55,17 +82,33 @@ import "vue-good-table/dist/vue-good-table.css";
       }
     },
     methods: {
-      searchSingleGame() {
+      searchCreator() {
         console.log(`Game: ${this.game}`);
-        var apiUrl = 'http://localhost:8081/api/games/game-info/';
+        var apiUrl = 'http://localhost:8081/api/creator/get-creator/';
         apiUrl = apiUrl.concat(this.game);
         axios.get(apiUrl)
         .then(response => {
           console.log("Response.data:" + response.data);
           if (response.data) {
             console.log("Game found");
-            response.data.releaseDate = new Date(response.data.releaseDate).toLocaleDateString();
-            this.games = [response.data];
+            this.creators = [response.data];
+          } else {
+            this.creators = [];
+            console.log("Game not found");
+          }
+        })
+      },
+      searchRecentGames() {
+        console.log(`ID: ${this.creatorId}`);
+        var apiUrl = 'http://localhost:8081/api/games/recent-games/';
+        apiUrl = apiUrl.concat(this.creatorId);
+        console.log(apiUrl);
+        axios.get(apiUrl)
+        .then(response => {
+          console.log("Response.data:" + response.data);
+          if (response.data) {
+            console.log("Game found");
+            this.games = response.data;
           } else {
             this.games = [];
             console.log("Game not found");
