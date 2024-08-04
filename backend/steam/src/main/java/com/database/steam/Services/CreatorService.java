@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 
 import com.database.steam.DAOs.CreatorDao;
 import com.database.steam.DTOs.Creator;
+import com.database.steam.DTOs.TopRatedPublisher;
 
 @Service
 public class CreatorService { 
@@ -18,7 +19,7 @@ public class CreatorService {
         return creatorDao.getCreator(name);
     }
 
-    public List<Creator> getTopCreators() {
+    public List<TopRatedPublisher> getTopCreators() {
         return creatorDao.getTopCreators();
     }
 }

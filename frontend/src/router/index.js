@@ -7,6 +7,8 @@ import CreateView from '@/views/CreateView.vue';
 import UserView from '@/views/UserView.vue';
 import GameView from '@/views/GameView.vue';
 import UserSearch from '@/views/UserSearchView.vue';
+import CreatorSearchView from '@/views/CreatorSearchView.vue';
+import ScoreSearchView from '@/views/ScoreSearchView.vue';
 
 const routes = [
   {
@@ -48,6 +50,16 @@ const routes = [
         path: 'game',
         name: 'game-view',
         component: GameView,
+      },
+      {
+        path: 'creator',
+        name: 'creatorSearchView',
+        component: CreatorSearchView,
+      },
+      {
+        path: 'score',
+        name: 'scoreSearchView',
+        component: ScoreSearchView,
       }
     ]
   }

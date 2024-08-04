@@ -3,6 +3,8 @@
       <ul>
         <li @click="navigateTo('userSearchView')">Friends</li>
         <li @click="navigateTo('gameSearchView')">Games</li>
+        <li @click="navigateTo('creatorSearchView')">Find Top Rated Creators</li>
+        <li @click="navigateTo('scoreSearchView')">Scores</li>
       </ul>
     </div>
   </template>

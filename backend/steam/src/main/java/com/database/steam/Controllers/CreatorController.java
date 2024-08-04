@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.database.steam.DTOs.Creator;
+import com.database.steam.DTOs.TopRatedPublisher;
 import com.database.steam.Services.CreatorService;
 
 @RestController
@@ -19,7 +20,7 @@ public class CreatorController {
     private CreatorService creatorService;
     
     @GetMapping("/top-creators")
-    public List<Creator> getTopCreators() {
+    public List<TopRatedPublisher> getTopCreators() {
         return creatorService.getTopCreators();
     }
 

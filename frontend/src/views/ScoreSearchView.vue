@@ -1,17 +1,15 @@
 <template>
-    <div class="gameSearchView">
-      <h1 class="header">Game Search</h1>
+    <div class="creatorSearchView">
+      <h1 class="header">Score Search</h1>
       <div class="search-results">
         <div class="search-window">
-          <button @click="getMostFavorited" class="search-button">Get Most Favorited</button>
-          <label for="game" class="form-label">Name:</label>
-          <input id="game" v-model="game" type="text" class="form-input" placeholder="Search by game name" />
-          <button @click="searchSingleGame" class="search-button">Search Single Game</button>
+          
+          <button @click="searchScores" class="search-button">Search All Scores</button>
         </div>
         <div class="results-window">
           <vue-good-table
           :columns="columns"
-          :rows="games"
+          :rows="scores"
           :search-options="{ enabled: true }"
           :pagination-options="{ enabled: true, perPage: 5 }"
           class="vgt-table"
@@ -39,25 +37,21 @@ import "vue-good-table/dist/vue-good-table.css";
         developer: '',
         publisher: '',
         score: 'highest',
-        games: [],
+        scores: [],
         columns: [
-          { label: 'appID', field: 'appID', type:"number" },
-          { label: 'Name', field: 'name' },
-          { label: 'Description', field: 'description' },
-          { label: 'Genre', field: 'genres' },
-          { label: 'Tags', field: 'tags' },
-          { label: 'DLC', field: 'dlcCount', type:"number" },
-          { label: 'Release Date', field: 'releaseDate' },
-          { label: 'Categories', field: 'categories' },
-          { label: 'Windows', field: 'windows', type:"boolean" },
-          { label: 'Linux', field: 'linux', type:"boolean" },
-          { label: 'Mac', field: 'mac', type:"boolean" }
+          { label: "Score ID", field: "scoreID", type: "number" },
+          { label: "App ID", field: "appId", type: "number" },
+          { label: "Score Rank", field: "scoreRank", type: "number" },
+          { label: "Positive Reviews", field: "positive", type: "number" },
+          { label: "Negative Reviews", field: "negative", type: "number" },
+          { label: "Metacritic Score", field: "metacriticScore", type: "number" },
+          { label: "User Score", field: "userScore", type: "number" },
+          { label: "Metacritic URL", field: "metacriticUrl"}
         ]
       }
     },
     methods: {
-      searchSingleGame() {
-        console.log(`Game: ${this.game}`);
+      searchScores() {
         var apiUrl = 'http://localhost:8081/api/games/game-info/';
         apiUrl = apiUrl.concat(this.game);
         axios.get(apiUrl)
@@ -70,24 +64,6 @@ import "vue-good-table/dist/vue-good-table.css";
           } else {
             this.games = [];
             console.log("Game not found");
-          }
-        })
-      },
-      getMostFavorited() {
-        console.log("Getting most favorited games");
-        var apiUrl = 'http://localhost:8081/api/games/get-most-favorited';
-        axios.get(apiUrl)
-        .then(response => {
-          console.log("Response.data:" + response.data);
-          if (response.data) {
-            console.log("Games found");
-            response.data.forEach(game => {
-              game.releaseDate = new Date(game.releaseDate).toLocaleDateString();
-            });
-            this.games = response.data;
-          } else {
-            this.games = [];
-            console.log("Games not found");
           }
         })
       }
@@ -144,7 +120,6 @@ import "vue-good-table/dist/vue-good-table.css";
     cursor: pointer;
     margin-top: 20px;
     align-self: center; /* Center the button horizontally */
-    display: flex;
   }
   
   .search-button:hover {

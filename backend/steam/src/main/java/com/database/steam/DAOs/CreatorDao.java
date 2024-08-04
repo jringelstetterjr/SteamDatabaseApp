@@ -9,6 +9,7 @@ import org.springframework.stereotype.Repository;
 
 import com.database.steam.MySQLConnection;
 import com.database.steam.DTOs.Creator;
+import com.database.steam.DTOs.TopRatedPublisher;
 
 @Repository
 public class CreatorDao {
@@ -28,26 +29,22 @@ public class CreatorDao {
         return creator;
     } 
 
-    public List<Creator> getTopCreators() {
-        List<Creator> creators = new ArrayList<>();
+    public List<TopRatedPublisher> getTopCreators() {
+        List<TopRatedPublisher> topCreators = new ArrayList<>();
         MySQLConnection mySQLConnection = new MySQLConnection();
         String sql = "SELECT c.publishers, COUNT(s.Positive) as reviews FROM creator c JOIN game g ON g.AppID = c.AppID JOIN score s on s.AppID = g.APPID " +
                         "WHERE c.Publishers != '' group by c.Publishers order by reviews desc LIMIT 10;";
 
         try (ResultSet resultSet = mySQLConnection.executeQuery(sql)) {
             while (resultSet.next()) {
-                creators.add(new Creator(
-                    resultSet.getInt("creatorID"),
-                    resultSet.getInt("appId"),
-                    resultSet.getString("supportEmail"),
+                topCreators.add(new TopRatedPublisher(
                     resultSet.getString("publishers"),
-                    resultSet.getString("developers"),
-                    resultSet.getString("supportUrl")));
+                    resultSet.getInt("reviews")));
             }
         } catch (SQLException e) {
             e.printStackTrace();
         }
 
-        return creators;
+        return topCreators;
     }
 }

@@ -29,7 +29,7 @@ public class GameDao {
     public List<Game> getMostFavorited() {
         List<Game> games = new ArrayList<>();
         MySQLConnection mySQLConnection = new MySQLConnection();
-        String sql = "SELECT g.Name, COUNT(uf.Username) AS favorite_count FROM user_favorites uf JOIN game g ON g.AppID = uf.AppID GROUP BY uf.AppID "
+        String sql = "SELECT g.*, COUNT(uf.Username) AS favorite_count FROM user_favorites uf JOIN game g ON g.AppID = uf.AppID GROUP BY uf.AppID "
                      + "ORDER BY favorite_count DESC LIMIT 5;";
 
         try (ResultSet resultSet = mySQLConnection.executeQuery(sql)) {
