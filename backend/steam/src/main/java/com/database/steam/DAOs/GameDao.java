@@ -10,6 +10,7 @@ import org.springframework.stereotype.Repository;
 import com.database.steam.MySQLConnection;
 import com.database.steam.DTOs.Game;
 import com.database.steam.DTOs.GameWithScore;
+import com.database.steam.DTOs.MostFavoritedGame;
 
 @Repository
 public class GameDao {
@@ -112,6 +113,21 @@ public class GameDao {
         return games;
     }
 
+    public List<MostFavoritedGame> getLeaderboard() {
+        List<MostFavoritedGame> games = new ArrayList<>();
+        MySQLConnection mySQLConnection = new MySQLConnection();
+        String sql = "SELECT g.*, COUNT(uf.Username) AS favorite_count FROM user_favorites uf JOIN game g ON g.AppID = uf.AppID GROUP BY uf.AppID "
+                     + "ORDER BY favorite_count DESC LIMIT 10;";
+
+        try (ResultSet resultSet = mySQLConnection.executeQuery(sql)) {
+            games = getMostFavoritedGamesFromResultSet(resultSet);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return games;
+    }
+
     private List<Game> getGamesFromResultSet(ResultSet resultSet) throws SQLException {
         List<Game> games = new ArrayList<>();
 
@@ -133,6 +149,16 @@ public class GameDao {
             resultSet.getDate("ReleaseDate"), resultSet.getBoolean("Windows"),
             resultSet.getBoolean("Mac"), resultSet.getBoolean("Linux"), resultSet.getInt("ScoreRank"),
             resultSet.getInt("Positive"), resultSet.getInt("Negative")));
+        }
+
+        return games;
+    }
+
+    private List<MostFavoritedGame> getMostFavoritedGamesFromResultSet(ResultSet resultSet) throws SQLException {
+        List<MostFavoritedGame> games = new ArrayList<>();
+
+        while (resultSet.next()) {
+            games.add(new MostFavoritedGame(resultSet.getString("Name"), resultSet.getInt("favorite_count")));
         }
 
         return games;

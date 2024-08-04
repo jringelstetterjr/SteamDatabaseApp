@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import com.database.steam.DTOs.Game;
 import com.database.steam.DTOs.GameWithScore;
+import com.database.steam.DTOs.MostFavoritedGame;
 import com.database.steam.Services.CreatorService;
 import com.database.steam.Services.GameService;
 
@@ -50,5 +51,9 @@ public class SteamController {
     @GetMapping("/recent-games/{creatorId}")
     public List<Game> getRecentGames(@PathVariable("creatorId") String creatorId) {
         return gameService.getRecentGames(creatorId);
+    }
+    @GetMapping("/get-leaderboard")
+    public List<MostFavoritedGame> getLeaderboard() {
+        return gameService.getLeaderboard();
     }
 }

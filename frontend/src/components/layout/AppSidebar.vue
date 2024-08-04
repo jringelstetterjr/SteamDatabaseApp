@@ -6,6 +6,7 @@
         <li @click="navigateTo('recommendationsSearchView')">Recommendations</li>
         <li @click="navigateTo('creatorSearchView')">Creators</li>
         <li @click="navigateTo('scoreSearchView')">Scores</li>
+        <li @click="navigateTo('leaderboardView')">Leaderboard</li>
       </ul>
     </div>
   </template>

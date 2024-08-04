@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import com.database.steam.DAOs.GameDao;
 import com.database.steam.DTOs.Game;
 import com.database.steam.DTOs.GameWithScore;
+import com.database.steam.DTOs.MostFavoritedGame;
 
 @Service
 public class GameService {
@@ -37,5 +38,8 @@ public class GameService {
 
     public List<Game> getRecentGames(String creatorId) {
         return gameDao.getRecentGames(creatorId);
+    }
+    public List<MostFavoritedGame> getLeaderboard() {
+        return gameDao.getLeaderboard();
     }
 }

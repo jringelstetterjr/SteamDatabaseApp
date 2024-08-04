@@ -10,6 +10,7 @@ import UserSearch from '@/views/UserSearchView.vue';
 import ScoreSearchView from '@/views/ScoreSearchView.vue';
 import RecommendationsSearchView from '@/views/RecommendationsSearchView.vue';
 import CreatorSearchView from '@/views/CreatorSearchView.vue';
+import LeaderboardView from '@/views/LeaderboardView.vue';
 
 const routes = [
   {
@@ -66,6 +67,11 @@ const routes = [
         path: 'creator',
         name: 'creatorSearchView',
         component: CreatorSearchView,
+      },
+      {
+        path: 'leaderboard',
+        name: 'leaderboardView',
+        component: LeaderboardView,
       }
     ]
   }
