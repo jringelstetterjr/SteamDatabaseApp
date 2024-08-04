@@ -10,7 +10,7 @@ import UserSearch from '@/views/UserSearchView.vue';
 
 const routes = [
   {
-    path: '/login',
+    path: '/',
     name: 'login',
     component: LoginView
   },

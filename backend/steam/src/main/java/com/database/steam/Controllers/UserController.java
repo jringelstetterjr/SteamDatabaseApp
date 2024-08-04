@@ -52,10 +52,26 @@ public class UserController {
         return userService.addFriend(username1, username2);
     }
 
+    @PostMapping("/follow/{username1}/{username2}")
+    public String follow(@PathVariable("username1") String username1, @PathVariable("username2") String username2) {
+        return userService.follow(username1, username2);
+    }
+
     @GetMapping("/get-users")
     public List<User> getUsers(@RequestParam(value = "username", required = false) String username,
                                @RequestParam(value = "displayName", required = false) String displayName) {
         return userService.getUsers(username, displayName);
     }
+
+    @GetMapping("/get-user-followers/{username}")
+    public List<User> getUserFollowers(@PathVariable("username") String username) {
+        return userService.getUserFollowers(username);
+    }
+
+    @GetMapping("/get-user-following/{username}")
+    public List<User> getUserFollowing(@PathVariable("username") String username) {
+        return userService.getUserFollowing(username);
+    }
+
 
 }

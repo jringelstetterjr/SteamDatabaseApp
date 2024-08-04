@@ -1,43 +1,148 @@
 <template>
   <div class="user-view">
-    <h1 class="profile-header">User's Profile: <span class="username" v:if v-if="username">{{ username }}</span></h1>
+    <h1 class="profile-header">User's Profile: <span class="username" v-if="username">{{ username }}</span></h1>
     <div class="profile-columns">
       <div class="column">
         <h2>Favorites</h2>
-        <!-- Data will go here -->
+        <vue-good-table
+          :columns="favColumns"
+          :rows="favGames"
+          :search-options="{ enabled: true }"
+          :pagination-options="{ enabled: true, perPage: 5 }"
+          class="vgt-table"
+        >
+          <template #table-row="{ column, row }">
+            <span v-if="column.field === 'unfavoriteActions'">
+              <button @click="removeFavorite(row.appID)">Unfavorite</button>
+            </span>
+            <span v-else>{{ row[column.field] }}</span>
+          </template>
+        </vue-good-table>
       </div>
       <div class="column">
-        <h2>Follows</h2>
-        <!-- Data will go here -->
+        <h2>Following</h2>
+        <vue-good-table
+          :columns="followColumns"
+          :rows="following"
+          :search-options="{ enabled: true }"
+          :pagination-options="{ enabled: true, perPage: 5 }"
+          class="vgt-table"
+        />
       </div>
       <div class="column">
         <h2>Followers</h2>
-        <!-- Data will go here -->
+        <vue-good-table
+          :columns="followColumns"
+          :rows="followers"
+          :search-options="{ enabled: true }"
+          :pagination-options="{ enabled: true, perPage: 5 }"
+          class="vgt-table"
+        />
       </div>
-    </div>
-    <div class="button-container">
-      <button class="follow-button">Follow</button>
     </div>
   </div>
 </template>
 
 <script>
+import axios from 'axios';
 import { computed } from 'vue';
 import { useUserStore } from '@/store';
+import "vue-good-table/dist/vue-good-table.css";
+
 export default {
   name: 'UserView',
+  data() {
+    return {
+      favGames: [],
+      followers: [],
+      following: [],
+      favColumns: [
+        { label: 'App ID', field: 'appID' },
+        { label: 'Name', field: 'name' },
+        { label: 'Actions', field: 'unfavoriteActions', sortable: false, filterable: false }
+      ],
+      followColumns: [
+        { label: 'Username', field: 'username' },
+        { label: 'Display Name', field: 'displayName' }
+      ]
+    }
+  },
   setup() {
     const userStore = useUserStore();
     const username = computed(() => userStore.username);
+
     return {
       username
     };
+  },
+  methods: {
+    getUserFavorites() {
+      const apiUrl = `http://localhost:8081/api/user/get-user-favorites/${this.username}`;
+      axios.get(apiUrl)
+        .then(response => {
+          if (response.data) {
+            this.favGames = response.data;
+          } else {
+            this.favGames = [];
+          }
+        })
+        .catch(error => {
+          console.error("There was an error fetching the favorites:", error);
+        });
+    },
+    getUserFollowers() {
+      const apiUrl = `http://localhost:8081/api/user/get-user-followers/${this.username}`;
+      axios.get(apiUrl)
+        .then(response => {
+          if (response.data) {
+            this.followers = response.data;
+          } else {
+            this.followers = [];
+          }
+        })
+        .catch(error => {
+          console.error("There was an error fetching the followers:", error);
+        });
+    },
+    getUserFollowing() {
+      const apiUrl = `http://localhost:8081/api/user/get-user-following/${this.username}`;
+      axios.get(apiUrl)
+        .then(response => {
+          if (response.data) {
+            this.following = response.data;
+          } else {
+            this.following = [];
+          }
+        })
+        .catch(error => {
+          console.error("There was an error fetching the following:", error);
+        });
+    },
+    removeFavorite(appId) {
+      console.log(`Attempting to remove favorite app: ${appId}`);
+      const apiUrl = `http://localhost:8081/api/user/remove-favorite/${this.username}/${appId}`;
+      axios.delete(apiUrl)
+        .then(response => {
+          console.log("Favorite removed:", response.data);
+          alert("Favorite removed!");
+          this.getUserFavorites(); // Refresh the favorites list
+        })
+        .catch(error => {
+          console.error("Error removing favorite:", error);
+          alert("Failed to remove favorite.");
+        });
+    }
+  },
+  mounted() {
+    this.getUserFavorites();
+    this.getUserFollowers();
+    this.getUserFollowing();
   }
 }
 </script>
 
 <style scoped>
-.user-profile {
+.user-view {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -71,24 +176,16 @@ h2 {
   margin-bottom: 10px;
 }
 
-.button-container {
-  display: flex;
-  justify-content: flex-end;
-  width: 100%;
-  padding-right: 20px;
-}
-
-.follow-button {
-  padding: 10px 20px;
+button {
+  padding: 5px 10px;
   border: none;
-  border-radius: 4px;
   background-color: #007bff;
   color: white;
-  font-size: 1em;
+  border-radius: 4px;
   cursor: pointer;
 }
 
-.follow-button:hover {
+button:hover {
   background-color: #0056b3;
 }
 </style>
