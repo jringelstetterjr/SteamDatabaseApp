@@ -28,7 +28,7 @@
           placeholder="Enter your password"
         />
         <button @click="createAccount" class="create-button">Create Account</button>
-        <router-link to="/login" class="login-link">Log in</router-link>
+        <router-link to="/" class="login-link">Log in</router-link>
       </div>
     </div>
   </template>
