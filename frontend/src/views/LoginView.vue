@@ -46,7 +46,6 @@
     },
     methods: {
       login() {
-        console.log(`Username: ${this.usernameInput}, Password: ${this.password}`);
         var apiUrl = 'http://localhost:8081/api/user/validate-user/';
         apiUrl = apiUrl.concat(this.usernameInput);
         apiUrl = apiUrl.concat('/');
@@ -54,14 +53,12 @@
         console.log(apiUrl);
         axios.get(apiUrl)
         .then(response => {
-          console.log("Response.data:" + response.data);
           if (response.data == true) {
-            console.log("Login successful");
             this.userStore.setUsername(this.usernameInput);
-            console.log(this.userStore.getUsername);
+            alert("Login successful!");
             this.$router.push({ name: 'home-view' });        
           } else {
-            console.log("Login failed");
+            alert("Login failed!");
           }
         })
       }

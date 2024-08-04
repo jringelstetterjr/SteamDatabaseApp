@@ -83,18 +83,15 @@ import "vue-good-table/dist/vue-good-table.css";
     },
     methods: {
       searchCreator() {
-        console.log(`Game: ${this.game}`);
         var apiUrl = 'http://localhost:8081/api/creator/get-creator/';
         apiUrl = apiUrl.concat(this.game);
         axios.get(apiUrl)
         .then(response => {
-          console.log("Response.data:" + response.data);
           if (response.data) {
-            console.log("Game found");
             this.creators = [response.data];
           } else {
             this.creators = [];
-            console.log("Game not found");
+            alert("Creator not found");
           }
         })
       },

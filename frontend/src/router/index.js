@@ -1,6 +1,5 @@
 import { createRouter, createWebHistory } from 'vue-router';
 import AppLayout from '@/components/layout/AppLayout.vue';
-import HomieView from '@/views/HomieView.vue';
 import GameSearchView from '@/views/GameSearchView.vue';
 import LoginView from '@/views/LoginView.vue';
 import CreateView from '@/views/CreateView.vue';
@@ -11,6 +10,7 @@ import ScoreSearchView from '@/views/ScoreSearchView.vue';
 import RecommendationsSearchView from '@/views/RecommendationsSearchView.vue';
 import CreatorSearchView from '@/views/CreatorSearchView.vue';
 import LeaderboardView from '@/views/LeaderboardView.vue';
+import HomeView from '@/views/HomeView.vue';
 
 const routes = [
   {
@@ -30,7 +30,7 @@ const routes = [
       {
         path: 'home', // Home view at the root path
         name: 'home-view',
-        component: HomieView,
+        component: HomeView,
         meta: { requiresAuth: true }
       },
       {
