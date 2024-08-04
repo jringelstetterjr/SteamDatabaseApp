@@ -13,14 +13,15 @@ import com.database.steam.DTOs.TopRatedPublisher;
 
 @Repository
 public class CreatorDao {
-    public String getCreator(String name) {
+    public Creator getCreator(String name) {
         MySQLConnection mySQLConnection = new MySQLConnection();
-        String sql = "SELECT c.Publishers FROM steam.creator c JOIN steam.game g ON c.AppId = g.AppID WHERE g.Name = ?";
-        String creator = null;
+        String sql = "SELECT c.* FROM steam.creator c JOIN steam.game g ON c.AppId = g.AppID WHERE g.Name = ?";
+        Creator creator = null;
         
         try (ResultSet resultSet = mySQLConnection.executePreparedStatement(sql, new ArrayList<>(List.of(name)))) {
             if (resultSet.next()) {
-                creator = resultSet.getString("publishers");
+                creator = new Creator(resultSet.getInt("creatorID"), resultSet.getInt("AppID"), resultSet.getString("supportEmail"),
+                resultSet.getString("Publishers"), resultSet.getString("Developers"), resultSet.getString("supportUrl") );
             }
         } catch (SQLException e) {
             e.printStackTrace();

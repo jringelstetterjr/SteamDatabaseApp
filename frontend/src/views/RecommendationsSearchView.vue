@@ -1,11 +1,11 @@
 <template>
     <div class="gameSearchView">
-      <h1 class="header">Creator Search</h1>
+      <h1 class="header">Recommendations Search</h1>
       <div class="search-results">
         <div class="search-window">
           <label for="game" class="form-label">Name:</label>
           <input id="game" v-model="game" type="text" class="form-input" placeholder="Search by game name" />
-          <button @click="searchCreator" class="search-button">Search Creators</button>
+          <button @click="searchRecommendations" class="search-button">Find Recommendations!</button>
         </div>
         <div class="results-window">
           <vue-good-table
@@ -40,27 +40,29 @@ import "vue-good-table/dist/vue-good-table.css";
         score: 'highest',
         games: [],
         columns: [
-          { label: 'Creator ID', field: 'creatorID', type:"number" },
-          { label: 'Support Email', field: 'supportEmail' },
-          { label: 'Publishers', field: 'publishers' },
-          { label: 'Developers', field: 'developers' },
-          { label: 'Support URL', field: 'supportUrl' },
-          { label: 'App ID', field: 'appId' },
-
+          { label: 'appID', field: 'appID', type:"number" },
+          { label: 'Name', field: 'name' },
+          { label: 'Genre', field: 'genres' },
+          { label: 'DLC', field: 'dlcCount', type:"number" },
+          { label: 'Release Date', field: 'releaseDate' },
+          { label: 'Windows', field: 'windows', type:"boolean" },
+          { label: 'Linux', field: 'linux', type:"boolean" },
+          { label: 'Mac', field: 'mac', type:"boolean" }
         ]
       }
     },
     methods: {
-      searchCreator() {
+      searchRecommendations() {
         console.log(`Game: ${this.game}`);
-        var apiUrl = 'http://localhost:8081/api/creator/get-creator/';
+        var apiUrl = 'http://localhost:8081/api/games/reccomendations/';
         apiUrl = apiUrl.concat(this.game);
         axios.get(apiUrl)
         .then(response => {
           console.log("Response.data:" + response.data);
           if (response.data) {
             console.log("Game found");
-            this.games = [response.data];
+            response.data.releaseDate = new Date(response.data.releaseDate).toLocaleDateString();
+            this.games = response.data;
           } else {
             this.games = [];
             console.log("Game not found");

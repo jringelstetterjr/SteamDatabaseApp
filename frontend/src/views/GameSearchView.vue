@@ -3,10 +3,9 @@
       <h1 class="header">Game Search</h1>
       <div class="search-results">
         <div class="search-window">
-          <button @click="getMostFavorited" class="search-button">Get Most Favorited</button>
           <label for="game" class="form-label">Name:</label>
           <input id="game" v-model="game" type="text" class="form-input" placeholder="Search by game name" />
-          <button @click="searchSingleGame" class="search-button">Search Single Game</button>
+          <button @click="searchSingleGame" class="search-button">Search Games</button>
         </div>
         <div class="results-window">
           <vue-good-table
@@ -70,24 +69,6 @@ import "vue-good-table/dist/vue-good-table.css";
           } else {
             this.games = [];
             console.log("Game not found");
-          }
-        })
-      },
-      getMostFavorited() {
-        console.log("Getting most favorited games");
-        var apiUrl = 'http://localhost:8081/api/games/get-most-favorited';
-        axios.get(apiUrl)
-        .then(response => {
-          console.log("Response.data:" + response.data);
-          if (response.data) {
-            console.log("Games found");
-            response.data.forEach(game => {
-              game.releaseDate = new Date(game.releaseDate).toLocaleDateString();
-            });
-            this.games = response.data;
-          } else {
-            this.games = [];
-            console.log("Games not found");
           }
         })
       }

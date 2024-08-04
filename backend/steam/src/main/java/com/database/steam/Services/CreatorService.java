@@ -15,7 +15,7 @@ public class CreatorService {
     @Autowired
     CreatorDao creatorDao;
 
-    public String getCreator(String name) {
+    public Creator getCreator(String name) {
         return creatorDao.getCreator(name);
     }
 

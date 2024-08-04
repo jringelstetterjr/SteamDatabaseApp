@@ -25,7 +25,7 @@ public class CreatorController {
     }
 
      @GetMapping("/get-creator/{name}")
-    public String getCreator(@PathVariable("name") String name) {
+    public Creator getCreator(@PathVariable("name") String name) {
         return creatorService.getCreator(name);
     }
 }

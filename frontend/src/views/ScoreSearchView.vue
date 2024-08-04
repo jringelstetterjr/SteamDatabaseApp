@@ -3,7 +3,8 @@
       <h1 class="header">Score Search</h1>
       <div class="search-results">
         <div class="search-window">
-          
+          <label for="appId" class="form-label">App ID's:</label>
+          <input id="appId" v-model="appId" type="text" class="form-input" placeholder="Search by App ID" />
           <button @click="searchScores" class="search-button">Search All Scores</button>
         </div>
         <div class="results-window">
@@ -39,31 +40,30 @@ import "vue-good-table/dist/vue-good-table.css";
         score: 'highest',
         scores: [],
         columns: [
-          { label: "Score ID", field: "scoreID", type: "number" },
-          { label: "App ID", field: "appId", type: "number" },
+          { label: "App ID", field: "appID", type: "number" },
+          { label: "Name", field: "name", },
+          { label: "Genres", field: "genres", },
+          { label: "DLC Count", field: "dlcCount", type: "number" },
           { label: "Score Rank", field: "scoreRank", type: "number" },
           { label: "Positive Reviews", field: "positive", type: "number" },
-          { label: "Negative Reviews", field: "negative", type: "number" },
-          { label: "Metacritic Score", field: "metacriticScore", type: "number" },
-          { label: "User Score", field: "userScore", type: "number" },
-          { label: "Metacritic URL", field: "metacriticUrl"}
+          { label: "Release Date", field: "releaseDate" },
         ]
       }
     },
     methods: {
       searchScores() {
-        var apiUrl = 'http://localhost:8081/api/games/game-info/';
-        apiUrl = apiUrl.concat(this.game);
+        var apiUrl = 'http://localhost:8081/api/games/get-game-scores/';
+        apiUrl = apiUrl.concat(this.appId);
         axios.get(apiUrl)
         .then(response => {
           console.log("Response.data:" + response.data);
           if (response.data) {
-            console.log("Game found");
+            console.log("scores found");
             response.data.releaseDate = new Date(response.data.releaseDate).toLocaleDateString();
-            this.games = [response.data];
+            this.scores = response.data;
           } else {
-            this.games = [];
-            console.log("Game not found");
+            this.scores = [];
+            console.log("scores not found");
           }
         })
       }
