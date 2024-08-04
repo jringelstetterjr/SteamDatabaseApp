@@ -1,16 +1,16 @@
 <template>
-    <div class="gameSearchView">
-      <h1 class="header">Game Search</h1>
+    <div class="creatorSearchView">
+      <h1 class="header">Score Search</h1>
       <div class="search-results">
         <div class="search-window">
-          <label for="game" class="form-label">Name:</label>
-          <input id="game" v-model="game" type="text" class="form-input" placeholder="Search by game name" />
-          <button @click="searchSingleGame" class="search-button">Search Games</button>
+          <label for="appId" class="form-label">App ID's:</label>
+          <input id="appId" v-model="appId" type="text" class="form-input" placeholder="Search by App ID" />
+          <button @click="searchScores" class="search-button">Search All Scores</button>
         </div>
         <div class="results-window">
           <vue-good-table
           :columns="columns"
-          :rows="games"
+          :rows="scores"
           :search-options="{ enabled: true }"
           :pagination-options="{ enabled: true, perPage: 5 }"
           class="vgt-table"
@@ -38,37 +38,32 @@ import "vue-good-table/dist/vue-good-table.css";
         developer: '',
         publisher: '',
         score: 'highest',
-        games: [],
+        scores: [],
         columns: [
-          { label: 'appID', field: 'appID', type:"number" },
-          { label: 'Name', field: 'name' },
-          { label: 'Description', field: 'description' },
-          { label: 'Genre', field: 'genres' },
-          { label: 'Tags', field: 'tags' },
-          { label: 'DLC', field: 'dlcCount', type:"number" },
-          { label: 'Release Date', field: 'releaseDate' },
-          { label: 'Categories', field: 'categories' },
-          { label: 'Windows', field: 'windows', type:"boolean" },
-          { label: 'Linux', field: 'linux', type:"boolean" },
-          { label: 'Mac', field: 'mac', type:"boolean" }
+          { label: "App ID", field: "appID", type: "number" },
+          { label: "Name", field: "name", },
+          { label: "Genres", field: "genres", },
+          { label: "DLC Count", field: "dlcCount", type: "number" },
+          { label: "Score Rank", field: "scoreRank", type: "number" },
+          { label: "Positive Reviews", field: "positive", type: "number" },
+          { label: "Release Date", field: "releaseDate" },
         ]
       }
     },
     methods: {
-      searchSingleGame() {
-        console.log(`Game: ${this.game}`);
-        var apiUrl = 'http://localhost:8081/api/games/game-info/';
-        apiUrl = apiUrl.concat(this.game);
+      searchScores() {
+        var apiUrl = 'http://localhost:8081/api/games/get-game-scores/';
+        apiUrl = apiUrl.concat(this.appId);
         axios.get(apiUrl)
         .then(response => {
           console.log("Response.data:" + response.data);
           if (response.data) {
-            console.log("Game found");
+            console.log("scores found");
             response.data.releaseDate = new Date(response.data.releaseDate).toLocaleDateString();
-            this.games = [response.data];
+            this.scores = response.data;
           } else {
-            this.games = [];
-            console.log("Game not found");
+            this.scores = [];
+            console.log("scores not found");
           }
         })
       }
@@ -125,7 +120,6 @@ import "vue-good-table/dist/vue-good-table.css";
     cursor: pointer;
     margin-top: 20px;
     align-self: center; /* Center the button horizontally */
-    display: flex;
   }
   
   .search-button:hover {

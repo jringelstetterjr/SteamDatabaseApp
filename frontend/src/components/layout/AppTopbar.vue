@@ -1,4 +1,8 @@
 <template>
+    <div class="topbar">
+      <!-- Router link for logo -->
+      <router-link to="/home" class="app-logo-link">
+        <img src="@/assets/steamLogo.png" alt="App Logo" class="app-logo">
   <div class="topbar">
     <!-- Router link for logo -->
     <router-link to="/" class="app-logo-link">
