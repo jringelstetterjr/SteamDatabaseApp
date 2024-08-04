@@ -102,7 +102,8 @@ public class GameDao {
     public List<Game> getRecentGames(String creatorId) {
         List<Game> games = new ArrayList<>();
         MySQLConnection mySQLConnection = new MySQLConnection();
-        String sql = "SELECT * FROM game g JOIN creator c ON c.AppID = g.AppID WHERE c.CreatorID = ? ORDER BY g.ReleaseDate DESC LIMIT 10;";
+        String sql = "SELECT g.* FROM game g JOIN creator c ON c.AppID = g.AppID WHERE c.Developers LIKE (SELECT Developers FROM creator " 
+        + " WHERE CreatorID = ?) ORDER BY g.ReleaseDate DESC LIMIT 10;";
 
         try (ResultSet resultSet = mySQLConnection.executePreparedStatement(sql, new ArrayList<>(List.of(creatorId)))) {
             games = getGamesFromResultSet(resultSet);
@@ -116,8 +117,8 @@ public class GameDao {
     public List<MostFavoritedGame> getLeaderboard() {
         List<MostFavoritedGame> games = new ArrayList<>();
         MySQLConnection mySQLConnection = new MySQLConnection();
-        String sql = "SELECT g.*, COUNT(uf.Username) AS favorite_count FROM user_favorites uf JOIN game g ON g.AppID = uf.AppID GROUP BY uf.AppID "
-                     + "ORDER BY favorite_count DESC LIMIT 10;";
+        String sql = "SELECT g.Name, COUNT(uf.Username) AS favorite_count FROM user_favorites uf " 
+            + " JOIN game g ON g.AppID = uf.AppID GROUP BY uf.AppID ORDER BY favorite_count DESC LIMIT 5";
 
         try (ResultSet resultSet = mySQLConnection.executeQuery(sql)) {
             games = getMostFavoritedGamesFromResultSet(resultSet);
