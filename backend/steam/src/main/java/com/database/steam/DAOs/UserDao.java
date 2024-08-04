@@ -27,7 +27,7 @@ public class UserDao {
 
     public List<Game> getUserFavorites(String username) {
         MySQLConnection mySQLConnection = new MySQLConnection();
-        String sql = "SELECT uf.*, g.name FROM user_favorites uf JOIN game g ON g.AppID = uf.AppID WHERE uf.Username = ?;";
+        String sql = "SELECT g.* FROM user_favorites uf JOIN game g ON g.AppID = uf.AppID WHERE uf.Username = ?;";
         List<Game> favorites = new ArrayList<>();
         
         try (ResultSet resultSet = mySQLConnection.executePreparedStatement(sql, new ArrayList<>(List.of(username)))) {
