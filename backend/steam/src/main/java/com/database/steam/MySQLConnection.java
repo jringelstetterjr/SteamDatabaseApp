@@ -14,7 +14,8 @@ public class MySQLConnection {
     static final String netID = "root";
     static final String hostName = "localhost";
     static final String databaseURL = "jdbc:mysql://" + hostName + "/" + databasePrefix + "?autoReconnect=true&useSSL=false";
-    static final String password = "151978Kohn";
+    //TODO change password
+    static final String password = "password";
 
     private Connection connection = null;
     private Statement statement = null;
