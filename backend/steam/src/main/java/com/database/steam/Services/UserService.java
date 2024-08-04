@@ -7,6 +7,8 @@ import org.springframework.stereotype.Service;
 
 import com.database.steam.DAOs.UserDao;
 import com.database.steam.DTOs.Game;
+import com.database.steam.DTOs.User;
+
 
 @Service
 public class UserService {
@@ -36,5 +38,21 @@ public class UserService {
 
     public String addFriend(String username1, String username2) {
         return userDao.addFriend(username1, username2);
+    }
+
+    public String follow(String username1, String username2) {
+        return userDao.follow(username1, username2);
+    }
+
+    public List<User> getUsers(String username, String displayName) {
+        return userDao.getUsers(username, displayName);
+    }
+
+    public List<User> getUserFollowers(String username) {
+        return userDao.getUserFollowers(username);
+    }
+
+    public List<User> getUserFollowing(String username) {
+        return userDao.getUserFollowing(username);
     }
 }
