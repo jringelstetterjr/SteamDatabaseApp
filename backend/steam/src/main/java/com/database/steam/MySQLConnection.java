@@ -1,5 +1,6 @@
 package com.database.steam;
 
+import java.sql.CallableStatement;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -13,7 +14,7 @@ public class MySQLConnection {
     static final String databasePrefix = "steam";
     static final String netID = "root";
     static final String hostName = "localhost";
-    static final String databaseURL = "jdbc:mysql://" + hostName + "/" + databasePrefix + "?autoReconnect=true&useSSL=false";
+    static final String databaseURL = "jdbc:mysql://" + hostName + "/" + databasePrefix + "?allowPublicKeyRetrieval=true&autoReconnect=true&useSSL=false";
     //TODO change password
     static final String password = "password";
 
@@ -46,6 +47,21 @@ public class MySQLConnection {
             e.printStackTrace();
         }
         
+        return resultSet;
+    }
+
+    public ResultSet executeStoredProc(String procedureCall) throws SQLException {
+        try {
+            if (connection == null || connection.isClosed()) {
+                connect();
+            }
+
+            CallableStatement callableStatement = connection.prepareCall(procedureCall);
+            resultSet = callableStatement.executeQuery();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
         return resultSet;
     }
 

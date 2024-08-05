@@ -58,7 +58,7 @@
           console.log("Response.data:" + response.data);
           if (response.data == "User created successfully") {
             console.log("Account creation successful");
-            this.$router.push({ name: 'home-view' });
+            this.$router.push({ name: 'login' });
           } else {
             console.log("Account creation failed");
           }

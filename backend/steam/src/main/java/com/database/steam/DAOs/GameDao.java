@@ -17,9 +17,9 @@ public class GameDao {
     public List<Game> getAllGames() {
         List<Game> games = new ArrayList<>();
         MySQLConnection mySQLConnection = new MySQLConnection();
-        String sql = "SELECT * FROM Game";
+        String prodcall = "{call get_all_games()}";
 
-        try (ResultSet resultSet = mySQLConnection.executeQuery(sql)) {
+        try (ResultSet resultSet = mySQLConnection.executeStoredProc(prodcall)) {
             games = getGamesFromResultSet(resultSet);
         } catch (SQLException e) {
             e.printStackTrace();

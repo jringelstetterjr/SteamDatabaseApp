@@ -52,6 +52,7 @@ public class SteamController {
     public List<Game> getRecentGames(@PathVariable("creatorId") String creatorId) {
         return gameService.getRecentGames(creatorId);
     }
+
     @GetMapping("/get-leaderboard")
     public List<MostFavoritedGame> getLeaderboard() {
         return gameService.getLeaderboard();
