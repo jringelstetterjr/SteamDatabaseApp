@@ -4,7 +4,7 @@
       <div class="search-results">
         <div class="search-window">
           <label for="appId" class="form-label">App ID's:</label>
-          <input id="appId" v-model="appId" type="text" class="form-input" placeholder="Search by App ID" />
+          <input id="appId" v-model="appId" type="text" class="form-input" placeholder="Search by App ID's" />
           <button @click="searchScores" class="search-button">Search All Scores</button>
         </div>
         <div class="results-window">
