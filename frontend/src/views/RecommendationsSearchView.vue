@@ -1,6 +1,6 @@
 <template>
     <div class="gameSearchView">
-      <h1 class="header">Recommendations Search</h1>
+      <h1 class="header">Recommendations</h1>
       <div class="search-results">
         <div class="search-window">
           <label for="game" class="form-label">Name:</label>
