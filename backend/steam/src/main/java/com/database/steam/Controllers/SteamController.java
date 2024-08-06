@@ -57,4 +57,9 @@ public class SteamController {
     public List<MostFavoritedGame> getLeaderboard() {
         return gameService.getLeaderboard();
     }
+
+    @GetMapping("/get-recommendations-by-developers/{name}")
+    public List<Game> getRecommendationsByDevelopers(@PathVariable("name") String name) {
+        return gameService.getRecommendationsByDevelopers(name);
+    }
 }

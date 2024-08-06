@@ -1,7 +1,7 @@
 <template>
     <div class="home">
-        <h1>Welcome to our website!</h1>
-        <p>Feel free to explore and discover amazing content.</p>
+        <h1>Welcome to Steam Game Search!</h1>
+        <p>Feel free to explore and discover amazing new games.</p>
         <div class="table-container">
             <div class="table-wrapper">
                 <h2>Top Creators</h2>

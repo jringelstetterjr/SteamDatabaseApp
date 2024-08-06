@@ -129,6 +129,22 @@ public class GameDao {
         return games;
     }
 
+    public List<Game> getRecommendationsByDevelopers(String name) {
+        List<Game> games = new ArrayList<>();
+        MySQLConnection mySQLConnection = new MySQLConnection();
+        String sql = "SELECT b.* FROM steam.game g JOIN steam.game b ON g.tags LIKE b.tags " + 
+            " JOIN steam.creator c ON g.AppID = c.AppID JOIN steam.creator d ON g.AppId = d.AppID " + 
+            " WHERE g.AppID <> b.AppID  AND g.Name = ? AND d.Developers LIKE C.Developers LIMIT 10";
+
+        try (ResultSet resultSet = mySQLConnection.executePreparedStatement(sql, new ArrayList<>(List.of(name)))) {
+            games = getGamesFromResultSet(resultSet);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return games;
+    }
+
     private List<Game> getGamesFromResultSet(ResultSet resultSet) throws SQLException {
         List<Game> games = new ArrayList<>();
 

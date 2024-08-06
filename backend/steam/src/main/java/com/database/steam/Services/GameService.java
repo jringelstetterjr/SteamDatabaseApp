@@ -42,4 +42,8 @@ public class GameService {
     public List<MostFavoritedGame> getLeaderboard() {
         return gameDao.getLeaderboard();
     }
+
+    public List<Game> getRecommendationsByDevelopers(String name) {
+        return gameDao.getRecommendationsByDevelopers(name);
+    }
 }

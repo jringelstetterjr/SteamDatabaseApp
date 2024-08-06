@@ -6,6 +6,7 @@
           <label for="game" class="form-label">Name:</label>
           <input id="game" v-model="game" type="text" class="form-input" placeholder="Search by game name" />
           <button @click="searchSingleGame" class="search-button">Search Games</button>
+          <button @click="searchRecommendationsByDevelopers" class="search-button">Find Games by the Same Developer</button>
         </div>
         <div class="results-window">
           <vue-good-table
@@ -71,6 +72,23 @@ import "vue-good-table/dist/vue-good-table.css";
             console.log("Game not found");
           }
         })
+      },
+      searchRecommendationsByDevelopers() {
+        console.log(`Game: ${this.game}`);
+        var apiUrl = 'http://localhost:8081/api/games/get-recommendations-by-developers/';
+        apiUrl = apiUrl.concat(this.game);
+        axios.get(apiUrl)
+        .then(response => {
+          console.log("Response.data:" + response.data);
+          if (response.data) {
+            console.log("Game found");
+            response.data.releaseDate = new Date(response.data.releaseDate).toLocaleDateString();
+            this.games = response.data;
+          } else {
+            this.games = [];
+            console.log("Game not found");
+          }
+        })
       }
     }
   }
@@ -91,13 +109,13 @@ import "vue-good-table/dist/vue-good-table.css";
   }
   
   .search-window {
-    width: 25%;
+    width: 15%;
     padding-right: 20px;
     border-right: 1px solid #ccc;
   }
   
   .results-window {
-    width: 75%;
+    width: 85%;
     padding-left: 20px;
   }
   

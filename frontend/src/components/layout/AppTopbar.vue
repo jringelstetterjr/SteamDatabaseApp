@@ -5,7 +5,7 @@
       <img src="@/assets/steamLogo.png" alt="App Logo" class="app-logo">
     </router-link>
     <h1>{{ title }}</h1>
-    <div class="app-name">Steam Database Application</div>
+    <div class="app-name">Steam Game Search</div>
     <div class="user-info">
       <router-link :to="{ name: 'userView' }" class="user-link">
         <h1 v-if="username">{{ username }}</h1>
