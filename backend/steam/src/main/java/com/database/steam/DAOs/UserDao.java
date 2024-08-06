@@ -15,8 +15,8 @@ import com.database.steam.DTOs.User;
 public class UserDao {
     public String createUser(String username, String password, String displayName) {
         MySQLConnection mySQLConnection = new MySQLConnection();
-        String sql = "INSERT INTO user (Username, Password, DisplayName) VALUES (?, ?, ?)";
-        int affectedRows = mySQLConnection.executeUpdatePreparedStatement(sql, new ArrayList<>(List.of(username, password, displayName)));
+        String sql = "{call add_user(?, ?, ?)}";
+        int affectedRows = mySQLConnection.executeStoredProceWithVars(sql, new ArrayList<>(List.of(username, password, displayName)));
         
         if (affectedRows > 0) {
             return "User created successfully";
@@ -59,7 +59,7 @@ public class UserDao {
 
     public String addFavorite(String username, String appId) {
         MySQLConnection mySQLConnection = new MySQLConnection();
-        String sql = "INSERT INTO user_favorites (Username, AppID) VALUES (?, ?)";
+        String sql = "{call add_favorite(?, ?)}";
         int affectedRows = mySQLConnection.executeUpdatePreparedStatement(sql, new ArrayList<>(List.of(username, appId)));
         
         if (affectedRows > 0) {
@@ -98,9 +98,9 @@ public class UserDao {
 
     public String follow(String username1, String username2) {
         MySQLConnection mySQLConnection = new MySQLConnection();
-        String sql1 = "INSERT INTO user_friends (Username1, Username2) VALUES (?, ?)";
+        String sql1 = "{call add_friend(?, ?)}";
         
-        int affectedRows1 = mySQLConnection.executeUpdatePreparedStatement(sql1, new ArrayList<>(List.of(username1, username2)));
+        int affectedRows1 = mySQLConnection.executeStoredProceWithVars(sql1, new ArrayList<>(List.of(username1, username2)));
         
         if (affectedRows1 > 0) {
             return "Friendship added successfully";
@@ -152,10 +152,7 @@ public class UserDao {
 
     public List<User> getUserFollowers(String username) {
         MySQLConnection mySQLConnection = new MySQLConnection();
-        String sql = "SELECT uf.Username1 AS Username, u.DisplayName " +
-                     "FROM user_friends uf " +
-                     "JOIN user u ON uf.Username1 = u.Username " +
-                     "WHERE uf.Username2 = ?";
+        String sql = "{call get_user_followers(?)}";
         List<User> followers = new ArrayList<>();
         
         try (ResultSet resultSet = mySQLConnection.executePreparedStatement(sql, new ArrayList<>(List.of(username)))) {
@@ -171,10 +168,7 @@ public class UserDao {
 
     public List<User> getUserFollowing(String username) {
         MySQLConnection mySQLConnection = new MySQLConnection();
-        String sql = "SELECT uf.Username2 AS Username, u.DisplayName " +
-                     "FROM user_friends uf " +
-                     "JOIN user u ON uf.Username2 = u.Username " +
-                     "WHERE uf.Username1 = ?";
+        String sql = "{call get_user_following(?)}";
         List<User> following = new ArrayList<>();
         
         try (ResultSet resultSet = mySQLConnection.executePreparedStatement(sql, new ArrayList<>(List.of(username)))) {

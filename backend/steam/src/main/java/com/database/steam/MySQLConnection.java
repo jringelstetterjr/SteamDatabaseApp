@@ -50,6 +50,47 @@ public class MySQLConnection {
         return resultSet;
     }
 
+    public int executeStoredProceWithVars(String procedureCall, List<String> params) {
+        int affectedRows = 0;
+        try {
+            if (connection == null || connection.isClosed()) {
+                connect();
+            }
+
+            CallableStatement callableStatement = connection.prepareCall(procedureCall);
+            
+            for (int i = 0; i < params.size(); i++) {
+                callableStatement.setObject(i + 1, params.get(i));
+            }
+    
+            affectedRows = callableStatement.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return affectedRows;
+    }
+
+    public ResultSet executeStoredProcWithVars(String procedureCall, List<String> params) throws SQLException {
+        try {
+            if (connection == null || connection.isClosed()) {
+                connect();
+            }
+
+            CallableStatement callableStatement = connection.prepareCall(procedureCall);
+
+            for (int i = 0; i < params.size(); i++) {
+                callableStatement.setObject(i + 1, params.get(i));
+            }
+
+            resultSet = callableStatement.executeQuery();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return resultSet;
+    }
+
     public ResultSet executeStoredProc(String procedureCall) throws SQLException {
         try {
             if (connection == null || connection.isClosed()) {
