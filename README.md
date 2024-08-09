@@ -4,7 +4,6 @@
 1. Java 17
 2. node.js and npm 
 3. VS code
-4. i think thats it? maybe
 
 ## Running the Code ##
 1. Check out the read me inside of frontend for more!
