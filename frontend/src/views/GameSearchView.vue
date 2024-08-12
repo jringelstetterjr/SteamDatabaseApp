@@ -25,6 +25,7 @@
   <script>
 import axios from 'axios';
 import "vue-good-table/dist/vue-good-table.css";
+import { useToast } from 'vue-toastification';
 
   export default {
     name: 'GameSearchView',
@@ -55,8 +56,16 @@ import "vue-good-table/dist/vue-good-table.css";
         ]
       }
     },
+    setup() {
+      const toast = useToast();
+      return { toast };
+    },
     methods: {
       searchSingleGame() {
+        if (this.game === '') {
+          this.toast.error('Please enter a game name');
+          return;
+        }
         console.log(`Game: ${this.game}`);
         var apiUrl = 'http://localhost:8081/api/games/game-info/';
         apiUrl = apiUrl.concat(this.game);
@@ -74,6 +83,10 @@ import "vue-good-table/dist/vue-good-table.css";
         })
       },
       searchRecommendationsByDevelopers() {
+        if (this.game === '') {
+          this.toast.error('Please enter a game name');
+          return;
+        }
         console.log(`Game: ${this.game}`);
         var apiUrl = 'http://localhost:8081/api/games/get-recommendations-by-developers/';
         apiUrl = apiUrl.concat(this.game);

@@ -47,6 +47,7 @@
 import axios from 'axios';
 import { computed } from 'vue';
 import { useUserStore } from '@/store';
+import { useToast } from 'vue-toastification';
 import "vue-good-table/dist/vue-good-table.css";
 
 export default {
@@ -70,9 +71,11 @@ export default {
   setup() {
     const userStore = useUserStore();
     const username = computed(() => userStore.username);
+    const toast = useToast();
 
     return {
-      username
+      username,
+      toast
     };
   },
   methods: {
@@ -124,12 +127,12 @@ export default {
       axios.delete(apiUrl)
         .then(response => {
           console.log("Favorite removed:", response.data);
-          alert("Favorite removed!");
+          this.toast.success("Favorite removed!", { timeout: 3000 });
           this.getUserFavorites(); // Refresh the favorites list
         })
         .catch(error => {
           console.error("Error removing favorite:", error);
-          alert("Failed to remove favorite.");
+          this.toast.error("Failed to remove favorite.", { timeout: 3000 });
         });
     }
   },

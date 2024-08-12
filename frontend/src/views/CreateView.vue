@@ -35,6 +35,7 @@
   
   <script>
   import axios from 'axios';
+  import { useToast} from 'vue-toastification';
   export default {
     name: 'CreateView',
     data() {
@@ -44,8 +45,18 @@
         password: ''
       }
     },
+    setup() {
+      const toast = useToast();
+      return {
+        toast
+      };
+    },
     methods: {
       createAccount() {
+        if (this.displayName == '' || this.username == '' || this.password == '') {
+          this.toast.error('Please enter a display name, username, and password', { timeout: 3000 });
+          return;
+        }
         console.log(`Display Name: ${this.displayName}, Username: ${this.username}, Password: ${this.password}`);
         var apiUrl = 'http://localhost:8081/api/user/create-user/';
         apiUrl = apiUrl.concat(this.username);

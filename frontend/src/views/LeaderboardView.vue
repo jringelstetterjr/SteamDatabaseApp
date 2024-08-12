@@ -28,6 +28,7 @@ import axios from 'axios';
 import "vue-good-table/dist/vue-good-table.css";
 import { computed } from 'vue';
 import { useUserStore } from '@/store';
+import { useToast } from 'vue-toastification';
 
 export default {
     name: 'HomieView',
@@ -70,11 +71,11 @@ export default {
           .post(apiUrl)
           .then((response) => {
             console.log("Game added to favorites", response.data);
-            alert("Game added to favorites!");
+            this.toast.success("Game added to favorites.", { timeout: 3000 });
           })
           .catch((error) => {
             console.error("Error adding game to favorites", error);
-            alert("Failed to add game to favorites.");
+            this.toast.error("Failed to add game to favorites.", { timeout: 3000 });
           });
       }
     },
@@ -84,8 +85,11 @@ export default {
     setup() {
         const userStore = useUserStore();
         const username = computed(() => userStore.username);
+        const toast = useToast();
+
         return {
-            username
+            username,
+            toast
         };
     }
 }

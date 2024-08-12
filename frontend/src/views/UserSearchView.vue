@@ -41,6 +41,7 @@ import axios from 'axios';
 import "vue-good-table/dist/vue-good-table.css";
 import { computed } from 'vue';
 import { useUserStore } from '@/store';
+import { useToast } from 'vue-toastification';
 
 export default {
   name: 'UserSearch',
@@ -99,11 +100,12 @@ export default {
       axios.post(apiUrl)
         .then(response => {
           console.log("Friend added:", response.data);
-          alert("Friend added!");
+          
+          this.toast.success("Friend added!", { timeout: 3000 });
         })
         .catch(error => {
           console.error("Error adding friend:", error);
-          alert("Failed to add friend.");
+          this.toast.error("Failed to add friend.", { timeout: 3000 });
         });
     },
     followUser(otherUsername) {
@@ -111,20 +113,22 @@ export default {
       axios.post(apiUrl)
         .then(response => {
           console.log("Followed user:", response.data);
-          alert("User followed!");
+          this.toast.success("User followed!", { timeout: 3000 });
         })
         .catch(error => {
           console.error("Error following user:", error);
-          alert("Failed to follow user.");
+          this.toast.error("Failed to follow user.", { timeout: 3000 });
         });
     }
   },
   setup() {
     const userStore = useUserStore();
     const currentUsername = computed(() => userStore.username);
+    const toast = useToast();
 
     return {
-      currentUsername
+      currentUsername,
+      toast
     };
   }
 }

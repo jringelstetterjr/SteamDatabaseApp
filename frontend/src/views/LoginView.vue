@@ -28,6 +28,7 @@
   <script>
   import axios from 'axios';
   import { useUserStore } from '../store';
+  import { useToast } from 'vue-toastification';
 
   export default {
     name: 'LoginView',
@@ -39,13 +40,20 @@
     },
     setup() {
       const userStore = useUserStore();
+      const toast = useToast();
 
       return {
-        userStore
+        userStore,
+        toast
       };
     },
     methods: {
       login() {
+        if (this.usernameInput == '' || this.password == '') {
+          this.toast.error('Please enter a username and password', { timeout: 3000 });
+          return;
+        }
+        
         var apiUrl = 'http://localhost:8081/api/user/validate-user/';
         apiUrl = apiUrl.concat(this.usernameInput);
         apiUrl = apiUrl.concat('/');
@@ -55,10 +63,10 @@
         .then(response => {
           if (response.data == true) {
             this.userStore.setUsername(this.usernameInput);
-            alert("Login successful!");
+            this.toast.success('Logged in successfully', { timeout: 3000 });
             this.$router.push({ name: 'home-view' });        
           } else {
-            alert("Login failed!");
+            this.toast.error('Invalid username or password', { timeout: 3000 });
           }
         })
       }

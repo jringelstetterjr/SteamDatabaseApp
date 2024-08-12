@@ -24,6 +24,7 @@
   <script>
 import axios from 'axios';
 import "vue-good-table/dist/vue-good-table.css";
+import { useToast } from 'vue-toastification';
 
   export default {
     name: 'GameSearchView',
@@ -50,8 +51,16 @@ import "vue-good-table/dist/vue-good-table.css";
         ]
       }
     },
+    setup() {
+      const toast = useToast();
+      return { toast };
+    },
     methods: {
       searchScores() {
+        if (this.appId === '') {
+          this.toast.error('Please enter an App ID', { timeout: 3000 });
+          return;
+        }
         var apiUrl = 'http://localhost:8081/api/games/get-game-scores/';
         apiUrl = apiUrl.concat(this.appId);
         axios.get(apiUrl)

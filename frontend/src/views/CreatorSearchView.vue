@@ -42,8 +42,9 @@
   </template>
   
   <script>
-import axios from 'axios';
-import "vue-good-table/dist/vue-good-table.css";
+  import axios from 'axios';
+  import "vue-good-table/dist/vue-good-table.css";
+  import { useToast } from 'vue-toastification';
 
   export default {
     name: 'GameSearchView',
@@ -81,8 +82,16 @@ import "vue-good-table/dist/vue-good-table.css";
         ]
       }
     },
+    setup() {
+      const toast = useToast();
+      return { toast };
+    },
     methods: {
       searchCreator() {
+        if (this.game === '') {
+          this.toast.error("Please enter a game name", { timeout: 3000 });
+          return;
+        }
         var apiUrl = 'http://localhost:8081/api/creator/get-creator/';
         apiUrl = apiUrl.concat(this.game);
         axios.get(apiUrl)
@@ -91,11 +100,15 @@ import "vue-good-table/dist/vue-good-table.css";
             this.creators = [response.data];
           } else {
             this.creators = [];
-            alert("Creator not found");
+            this.toast.error("Creator not found", { timeout: 3000 });
           }
         })
       },
       searchRecentGames() {
+        if (this.creatorId === '') {
+          this.toast.error("Please enter a creator ID", { timeout: 3000 });
+          return;
+        }
         console.log(`ID: ${this.creatorId}`);
         var apiUrl = 'http://localhost:8081/api/games/recent-games/';
         apiUrl = apiUrl.concat(this.creatorId);
